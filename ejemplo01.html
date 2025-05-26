@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Presentación HTML5: Misión Web Moderna</title>
+
+    <meta name="description" content="Una presentación moderna y gamificada sobre desarrollo web con HTML5, CSS y JavaScript.">
+    <meta name="author" content="Tu Nombre">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.min.css" id="theme">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* Variables CSS para una gestión de colores y fuentes más sencilla */
+        :root {
+            --main-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --heading-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --main-text-color: #333;
+            --accent-color: #28a745; /* Verde vibrante para energía y éxito */
+            --secondary-accent-color: #007bff; /* Azul para contraste */
+            --light-bg-color: #f8f9fa; /* Fondo muy claro */
+            --dark-text-color: #212529; /* Casi negro para el texto principal */
+            --code-bg-color: #f0f0f0; /* Fondo claro para bloques de código */
+            --border-color: #ddd; /* Para bordes y sombras sutiles */
+        }
+
+        /* Estilos generales del body y fuentes */
+        body {
+            font-family: var(--main-font);
+            background-color: var(--light-bg-color);
+            color: var(--dark-text-color);
+            line-height: 1.6;
+        }
+
+        /* Estilos de Reveal.js - sobrescribiendo defaults */
+        .reveal {
+            font-size: 1.1em;
+            font-weight: 400;
+        }
+
+        /* Estilos de encabezados */
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: var(--main-text-color);
+            font-family: var(--heading-font);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            text-transform: none;
+            margin-bottom: 0.5em;
+        }
+        .reveal h1 { font-size: 2.5em; }
+        .reveal h2 { font-size: 2em; }
+        .reveal h3 { font-size: 1.6em; }
+
+        /* Estilos de texto y listas */
+        .reveal p {
+            margin-bottom: 1em;
+            text-align: left;
+        }
+        .reveal ul, .reveal ol {
+            margin-left: 1.5em;
+            margin-bottom: 1em;
+            text-align: left;
+        }
+        .reveal li {
+            margin-bottom: 0.5em;
+        }
+
+        /* Estilos de sección - contenido centrado dentro de la diapositiva */
+        .reveal section {
+            text-align: left;
+            padding: 0 5%;
+        }
+        .reveal section > * {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 90%;
+        }
+
+        /* Estilos de imágenes */
+        .reveal section img {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-height: 400px;
+            width: auto;
+            display: block;
+            margin: 1em auto;
+            border-radius: 8px; /* Bordes ligeramente redondeados */
+        }
+
+        /* Estilos de citas */
+        .reveal blockquote {
+            border-left: 5px solid var(--secondary-accent-color);
+            padding: 1em 1.5em;
+            font-style: italic;
+            background-color: #f1f1f1;
+            margin: 1em auto;
+            max-width: 80%;
+            border-radius: 5px;
+        }
+
+        /* Controles de Reveal.js y barra de progreso */
+        .reveal .controls button {
+            color: var(--accent-color);
+        }
+        .reveal .progress span {
+            background: var(--accent-color);
+        }
+
+        /* Estilos para bloques de código preformateado */
+        .reveal pre code {
+            background-color: var(--code-bg-color);
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            line-height: 1.4;
+            max-height: 500px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Estilos para texto de código en línea */
+        .reveal code {
+            color: var(--secondary-accent-color);
+            font-weight: bold;
+            padding: 0.2em 0.5em;
+            border-radius: 3px;
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        /* Estilos para iframes (videos, contenido incrustado) */
+        .reveal iframe {
+            width: 90%;
+            height: 450px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 1em auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        /* Estilos para el esquema visual */
+        .scheme {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-around;
+            padding: 20px;
+            background-color: #eee;
+            border-radius: 8px;
+            margin: 1.5em auto;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .scheme-item {
+            text-align: center;
+            flex-basis: 150px;
+        }
+        .scheme-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: var(--light-bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin: 0 auto 10px auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Estilos para la actividad interactiva (quiz) */
+        .interactive-quiz {
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin: 1.5em auto;
+            max-width: 700px;
+        }
+        .interactive-quiz h3 {
+            margin-top: 0;
+            color: var(--main-text-color);
+        }
+        .quiz-question {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .quiz-question:last-of-type {
+            border-bottom: none;
+        }
+        .quiz-answer label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+        }
+        .quiz-answer input[type="radio"] {
+            margin-right: 8px;
+            accent-color: var(--accent-color);
+        }
+        .interactive-quiz button {
+            background-color: var(--accent-color);
+            color: var(--light-bg-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .interactive-quiz button:hover {
+            background-color: #218838; /* Tono más oscuro al pasar el ratón */
+        }
+        #quiz-results {
+            margin-top: 25px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+        }
+        .quiz-feedback {
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-weight: normal;
+        }
+        .quiz-feedback.correct { color: green; }
+        .quiz-feedback.incorrect { color: red; }
+
+        /* Animaciones Animate.css (clases base y personalizadas) */
+        .animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+        .fade-in {
+            animation-name: fadeIn;
+        }
+        .pulse {
+            animation-name: pulse;
+            animation-duration: 1.5s;
+            animation-iteration-count: infinite;
+        }
+        .bounceIn {
+            animation-name: bounceIn;
+        }
+
+        /* Atributos data-delay para animaciones escalonadas */
+        .reveal [data-delay] {
+            opacity: 0;
+        }
+
+        /* Estilos para el pie de página de la diapositiva (en algunos casos) */
+        .slide-footer {
+            font-size: 0.7em;
+            color: #888;
+            margin-top: 2em;
+            text-align: center;
+        }
+
+        /* Estilos para la diapositiva de redes sociales */
+        .social-links a {
+            display: inline-block;
+            margin: 0 15px;
+            color: var(--secondary-accent-color);
+            font-size: 3em;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .social-links a:hover {
+            transform: scale(1.1);
+            color: var(--accent-color);
+        }
+
+        /* Estilo para la diapositiva de Misión Completada */
+        .mission-complete {
+            text-align: center;
+            padding: 50px;
+            background-color: #e6ffe6; /* Fondo suave para el éxito */
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        .mission-complete h2 {
+            color: var(--accent-color);
+            font-size: 3em;
+            margin-bottom: 0.5em;
+        }
+        .mission-complete p {
+            font-size: 1.3em;
+            color: var(--main-text-color);
+        }
+        .mission-complete .icon {
+            font-size: 5em;
+            color: var(--accent-color);
+            margin-bottom: 0.5em;
+        }
+        .mission-complete .score-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--secondary-accent-color);
+            margin-top: 1em;
+        }
+
+        /* Estilos para el índice */
+        .index-list li {
+            list-style: none; /* Eliminar viñetas por defecto */
+            margin-bottom: 0.7em;
+            font-size: 1.2em;
+        }
+        .index-list li a {
+            color: var(--secondary-accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .index-list li a:hover {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section data-transition="fade">
+                <h1 class="animated fadeIn">Misión Web Moderna: Tu Guía HTML5</h1>
+                <h3 class="animated fadeIn" data-delay="0.5">Desbloquea el Poder del Desarrollo Web</h3>
+                <p class="animated fadeIn" data-delay="1">Presentado por: Tu Nombre</p>
+                <p class="animated fadeIn" data-delay="1.5"><small>Fecha: 25 de Mayo de 2025</small></p>
+                <div class="fragment fade-in animated bounceIn" data-delay="2">
+                    <i class="fas fa-rocket" style="font-size: 2em; color: var(--accent-color);"></i>
+                    <p style="font-size: 1.2em;">¡Prepárate para la aventura!</p>
+                </div>
+            </section>
+
+            <section data-transition="slide">
+                <h2 class="animated fadeIn">Tu Mapa de Misión</h2>
+                <ul class="index-list animated fadeIn" data-delay="0.3">
+                    <li class="fragment fade-in">1. ¿Por Qué HTML5? - La Plataforma del Futuro</li>
+                    <li class="fragment fade-in">2. Las 3 Gemas de la Web: HTML, CSS, JS</li>
+                    <li class="fragment fade-in">3. HTML5: Estructura y Semántica</li>
+                    <li class="fragment fade-in">4. CSS3: Estilo, Responsividad y Animación</li>
+                    <li class="fragment fade-in">5. JavaScript: Lógica e Interactividad</li>
+                    <li class="fragment fade-in">6. Elementos Multimedia y Avanzados</li>
+                    <li class="fragment fade-in">7. Desafío de Conocimiento: Tu Primer Quiz</li>
+                    <li class="fragment fade-in">8. Estética Web Moderna: Diseño Minimalista</li>
+                    <li class="fragment fade-in">9. ¡Misión Completada! Y Próximos Pasos</li>
+                </ul>
+            </section>
+
+            <section data-transition="slide">
+                <h2 class="animated fadeIn">¿Por Qué HTML5? La Plataforma del Futuro</h2>
+                <ul class="animated fadeIn" data-delay="0.3">
+                    <li class="fragment fade-in"><strong>Universalidad:</strong> ¡Funciona en cualquier dispositivo y navegador!</li>
+                    <li class="fragment fade-in"><strong>Flexibilidad Ilimitada:</strong> Control total sobre el diseño y la experiencia de usuario.</li>
+                    <li class="fragment fade-in"><strong>Interactividad Integrada:</strong> Desde videos hasta juegos, todo en el navegador.</li>
+                    <li class="fragment fade-in"><strong>Estándar Abierto:</strong> Acceso a una vasta comunidad y recursos.</li>
+                    <li class="fragment fade-in"><strong>SEO Amigable:</strong> Estructura semántica para una mejor visibilidad.</li>
+                </ul>
+                <img class="animated fadeIn" data-delay="1.5" src="https://images.unsplash.com/photo-1510915228389-a29d3ce9d246?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHdlYiUyMGRldmVsb3BtZW50fGVufDB8fDB8fHww&ixlib=rb-4.0.3&q=80&w=800" alt="Persona programando en una laptop">
+            </section>
+
+            <section data-transition="slide">
+                <h2 class="animated fadeIn">Las 3 Gemas de la Web: HTML, CSS, JS</h2>
+                <div class="scheme animated fadeIn" data-delay="0.3">
+                    <div class="scheme-item fragment fade-in">
+                        <div class="scheme-circle" style="background-color: #e34c26;"><i class="fab fa-html5"></i></div>
+                        <h3>HTML</h3>
+                        <p>La **estructura** y contenido.<br>El "esqueleto" de tu web.</p>
+                    </div>
+                    <div class="scheme-item fragment fade-in">
+                        <div class="scheme-circle" style="background-color: #264de4;"><i class="fab fa-css3-alt"></i></div>
+                        <h3>CSS</h3>
+                        <p>El **estilo** y diseño visual.<br>La "piel y ropa" de tu web.</p>
+                    </div>
+                    <div class="scheme-item fragment fade-in">
+                        <div class="scheme-circle" style="background-color: #F0DB4F; color: #323330;"><i class="fab fa-js-square"></i></div>
+                        <h3>JavaScript</h3>
+                        <p>La **interactividad** y lógica.<br>El "cerebro" que da vida a tu web.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section data-transition="slide">
+                <h2 class="animated fadeIn">HTML5: Estructura y Semántica</h2>
+                <p class="animated fadeIn" data-delay="0.3">HTML5 introdujo etiquetas semánticas para una web más legible y accesible:</p>
+                <div class="animated fadeIn" data-delay="0.6">
+                    <pre><code class="language-html">
+<body>
+    <header>
+        <h1>Mi Título Web</h1>
+        <nav>...</nav>
+    </header>
+
+    <main>
+        <section>
+            <article>...</article>
+            <aside>...</aside>
+        </section>
+    </main>
+
+    <footer>
+        <p>Derechos Reservados © 2025</p>
+    </footer>
+</body>
+                    </code></pre>
+                </div>
+                <ul class="animated fadeIn" data-delay="1.2">
+                    <li class="fragment fade-in"><code><header></code>, <code><nav></code>, <code><main></code>, <code><section></code>, <code><article></code>, <code><aside></code>, <code><footer></code></li>
+                    <li class="fragment fade-in">Mejoran el SEO y la accesibilidad para lectores de pantalla.</li>
+                </ul>
+            </section>
+
+            <section data-transition="slide">
+                <h2 class="animated fadeIn">CSS3: Estilo, Responsividad y Animación</h2>
+                <p class="animated fadeIn" data-delay="0.3">Dale vida a tu diseño con CSS:</p>
+                <div class="animated fadeIn" data-delay="0.6">
+                    <pre><code class="language-css">
+/* Diseño Responsivo con Media Queries */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+/* Animaciones y Transiciones */
+.button {
+    transition: background-color 0.3s ease;
+}
+.button:hover {
+    background-color: var(--accent-color);
+}
+                    </code></pre>
+                </div>
+                <ul class="animated fadeIn" data-delay="1.2">
+                    <li class="fragment fade-in">**Flexbox & Grid:** Para layouts complejos y responsivos.</li>
+                    <li class="fragment fade-in">**Transiciones & Animaciones:** Efectos suaves sin JavaScript.</li>
+                    <li class="fragment fade-in">**Variables CSS:** Para temas y mantenimiento sencillo.</li>
+                </ul>
+            </section>
+
+            <section data-transition="slide">
+                <h2 class="animated fadeIn">JavaScript: Lógica e Interactividad</h2>
+                <p class="animated fadeIn" data-delay="0.3">El motor de la interactividad en la web.</p>
+                <div class="animated fadeIn" data-delay="0.6">
+                    <pre><code class="language-javascript">
+// Manipulación del DOM
+document.getElementById('myButton').addEventListener('click', () => {
+    alert('¡Botón clickeado!');
+});
+
+// Peticiones a API (fetch)
+fetch('https://api.example.com/data')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+                    </code></pre>
+                </div>
+                <ul class="animated fadeIn" data-delay="1.2">
+                    <li class="fragment fade-in">Manipulación del DOM (Document Object Model).</li>
+                    <li class="fragment fade-in">Validación de formularios, efectos dinámicos.</li>
+                    <li class="fragment fade-in">Comunicación con APIs (AJAX, Fetch).</li>
+                </ul>
+            </section>
+
+            <section data-transition="zoom">
+                <h2 class="animated fadeIn">Elementos Multimedia y Avanzados</h2>
+                <p class="animated fadeIn" data-delay="0.3">HTML5 facilita la integración de medios y nuevas APIs:</p>
+                <div class="animated fadeIn" data-delay="0.6">
+                    <iframe
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&controls=1&mute=0"
+                        title="Rick Astley - Never Gonna Give You Up (Official Music Video)"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+                <ul class="animated fadeIn" data-delay="1.2">
+                    <li class="fragment fade-in">Etiquetas <code><video></code> y <code><audio></code>.</li>
+                    <li class="fragment fade-in">**Canvas:** Para gráficos 2D y animaciones.</li>
+                    <li class="fragment fade-in">**Web Storage:** Para almacenar datos en el navegador.</li>
+                    <li class="fragment fade-in">**Geolocation:** Para servicios basados en ubicación.</li>
+                </ul>
+                <div class="slide-footer">
+                    <i class="fas fa-video"></i> <i class="fas fa-code"></i> <i class="fas fa-map-marker-alt"></i>
+                </div>
+            </section>
+
+            <section data-transition="concave">
+                <h2 class="animated fadeIn">Desafío de Conocimiento: Tu Primer Quiz</h2>
+                <p class="animated fadeIn" data-delay="0.3">¡Pon a prueba tus habilidades! Cada respuesta correcta te da 10 puntos.</p>
+                <div class="interactive-quiz animated fadeIn" data-delay="0.6">
+                    <div class="quiz-question">
+                        <h3>1. ¿Qué etiqueta HTML se utiliza para incrustar un video directamente en una página?</h3>
+                        <label class="quiz-answer"><input type="radio" name="q1" value="a" data-correct="false"> <code><img></code></label><br>
+                        <label class="quiz-answer"><input type="radio" name="q1" value="b" data-correct="true"> <code><video></code></label><br>
+                        <label class="quiz-answer"><input type="radio" name="q1" value="c" data-correct="false"> <code><iframe></code></label><br>
+                        <div id="feedback-q1" class="quiz-feedback"></div>
+                    </div>
+                    <div class="quiz-question">
+                        <h3>2. ¿Cuál de estas propiedades CSS se usa para hacer un diseño responsivo?</h3>
+                        <label class="quiz-answer"><input type="radio" name="q2" value="a" data-correct="false"> <code>display: none;</code></label><br>
+                        <label class="quiz-answer"><input type="radio" name="q2" value="b" data-correct="true"> <code>@media</code></label><br>
+                        <label class="quiz-answer"><input type="radio" name="q2" value="c" data-correct="false"> <code>font-size: large;</code></label><br>
+                        <div id="feedback-q2" class="quiz-feedback"></div>
+                    </div>
+                     <div class="quiz-question">
+                        <h3>3. ¿Qué lenguaje de programación se usa para añadir interactividad a una página web?</h3>
+                        <label class="quiz-answer"><input type="radio" name="q3" value="a" data-correct="false"> Python</label><br>
+                        <label class="quiz-answer"><input type="radio" name="q3" value="b" data-correct="true"> JavaScript</label><br>
+                        <label class="quiz-answer"><input type="radio" name="q3" value="c" data-correct="false"> Java</label><br>
+                        <div id="feedback-q3" class="quiz-feedback"></div>
+                    </div>
+                    <button onclick="submitQuiz()">Enviar Respuestas</button>
+                    <div id="quiz-results" style="display:none;"></div>
+                </div>
+            </section>
+
+            <section data-transition="slide">
+                <h2 class="animated fadeIn">Estética Web Moderna: Diseño Minimalista</h2>
+                <p class="animated fadeIn" data-delay="0.3">Menos es más, pero con impacto.</p>
+                <img class="animated fadeIn" data-delay="0.6" src="https://images.unsplash.com/photo-1572802419224-296b49eb7ac9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bWluaW1hbGlzdCUyMGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D&ixlib=rb-4.0.3&q=80&w=800" alt="Ejemplo de diseño web minimalista">
+                <ul class="animated fadeIn" data-delay="1.2">
+                    <li class="fragment fade-in">**Espacio en Blanco:** Fundamental para la claridad.</li>
+                    <li class="fragment fade-in">**Tipografía:** Fuentes limpias y legibles.</li>
+                    <li class="fragment fade-in">**Colores:** Paleta limitada, un color de acento principal.</li>
+                    <li class="fragment fade-in">**Iconografía:** Íconos sencillos y consistentes.</li>
+                    <li class="fragment fade-in">**Funcionalidad:** Prioridad sobre la ornamentación excesiva.</li>
+                </ul>
+            </section>
+
+            <section data-transition="fade">
+                <div class="mission-complete animated bounceIn">
+                    <i class="fas fa-trophy icon"></i>
+                    <h2 class="animated fadeIn" data-delay="0.5">¡Misión Completada!</h2>
+                    <p class="animated fadeIn" data-delay="1">Has desbloqueado el conocimiento fundamental del desarrollo web moderno.</p>
+                    <p id="final-score-display" class="score-display animated fadeIn" data-delay="1.5">Tu Puntuación en el Quiz: --/30</p>
+                    <p class="animated fadeIn" data-delay="2">¡Sigue explorando y construyendo la web!</p>
+                </div>
+            </section>
+
+            <section data-transition="fade">
+                <h2 class="animated fadeIn">Conéctate y Sigue la Misión</h2>
+                <p class="animated fadeIn" data-delay="0.3">¡No te pierdas las próximas actualizaciones y misiones!</p>
+                <div class="social-links animated fadeIn" data-delay="0.6">
+                    <a href="https://twitter.com/tuusuario" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com/in/tuusuario" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/tuusuario" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="mailto:tu.email@example.com" target="_blank" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                <p class="animated fadeIn" data-delay="1.5"><small>Gracias por participar en esta misión de aprendizaje.</small></p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+
+    <script>
+        let userScore = 0; // Variable global para la puntuación del quiz
+
+        // Inicialización de Reveal.js
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide',
+            plugins: [
+                RevealMarkdown,
+                RevealHighlight,
+                RevealNotes
+            ]
+        });
+
+        // Event listener para las animaciones escalonadas y reseteo en cada diapositiva
+        Reveal.on('slidechanged', event => {
+            const currentSlide = event.currentSlide;
+            const animatedElements = currentSlide.querySelectorAll('.animated[data-delay]');
+
+            // Resetear animación para que se reproduzca cada vez que se visita la diapositiva
+            animatedElements.forEach(element => {
+                element.classList.remove('fadeIn', 'bounceIn', 'pulse'); // Añade aquí todas las clases de animación que uses
+                element.style.opacity = 0; // Ocultar antes de animar
+            });
+
+            // Aplicar animaciones con delay
+            animatedElements.forEach(element => {
+                const delay = parseFloat(element.dataset.delay) * 1000;
+                setTimeout(() => {
+                    // Decide qué animación aplicar. Aquí, si tiene 'bounceIn' lo aplica, sino 'fadeIn'.
+                    if (element.classList.contains('bounceIn')) {
+                        element.classList.add('bounceIn');
+                    } else if (element.classList.contains('pulse')) {
+                        element.classList.add('pulse');
+                    } else {
+                        element.classList.add('fadeIn');
+                    }
+                    element.style.opacity = 1;
+                }, delay);
+            });
+
+            // Actualizar la puntuación final si es la diapositiva de "Misión Completada"
+            if (currentSlide.querySelector('.mission-complete')) {
+                document.getElementById('final-score-display').textContent = `Tu Puntuación en el Quiz: ${userScore}/30`;
+            }
+        });
+
+        // Asegurar que la primera diapositiva tenga las animaciones al cargar la página
+        Reveal.on('ready', event => {
+            const firstSlide = event.currentSlide;
+            const animatedElements = firstSlide.querySelectorAll('.animated[data-delay]');
+            animatedElements.forEach(element => {
+                const delay = parseFloat(element.dataset.delay) * 1000;
+                setTimeout(() => {
+                    if (element.classList.contains('bounceIn')) {
+                        element.classList.add('bounceIn');
+                    } else if (element.classList.contains('pulse')) {
+                        element.classList.add('pulse');
+                    } else {
+                        element.classList.add('fadeIn');
+                    }
+                    element.style.opacity = 1;
+                }, delay);
+            });
+        });
+
+        /**
+         * Lógica del quiz interactivo gamificado.
+         * Valida las respuestas, calcula la puntuación y muestra feedback.
+         */
+        function submitQuiz() {
+            userScore = 0; // Resetear puntuación para cada intento
+            const questions = [
+                { name: 'q1', correctValue: 'b', feedbackId: 'feedback-q1' },
+                { name: 'q2', correctValue: 'b', feedbackId: 'feedback-q2' },
+                { name: 'q3', correctValue: 'b', feedbackId: 'feedback-q3' }
+            ];
+
+            let allAnswered = true;
+
+            questions.forEach(q => {
+                const selected = document.querySelector(`input[name="${q.name}"]:checked`);
+                const feedbackDiv = document.getElementById(q.feedbackId);
+
+                // Resetear feedback previo
+                feedbackDiv.textContent = '';
+                feedbackDiv.className = 'quiz-feedback';
+
+                if (selected) {
+                    if (selected.value === q.correctValue) {
+                        userScore += 10;
+                        feedbackDiv.textContent = '¡Correcto! ✅';
+                        feedbackDiv.classList.add('correct');
+                    } else {
+                        feedbackDiv.textContent = 'Incorrecto. ❌';
+                        feedbackDiv.classList.add('incorrect');
+                    }
+                } else {
+                    allAnswered = false;
+                    feedbackDiv.textContent = 'No respondida. ❓';
+                }
+            });
+
+            const quizResultsDiv = document.getElementById('quiz-results');
+            if (allAnswered) {
+                let resultsHtml = `<p>Tu Puntuación: <strong>${userScore}/30</strong></p>`;
+                if (userScore === 30) {
+                    resultsHtml += '<p style="color: var(--accent-color);">¡Felicidades! ¡Logro "Maestro Web" desbloqueado! 🏆</p>';
+                } else if (userScore >= 20) {
+                     resultsHtml += '<p style="color: var(--secondary-accent-color);">¡Muy bien! Estás en el camino correcto. ✨</p>';
+                } else {
+                    resultsHtml += '<p style="color: #6c757d;">Sigue practicando, ¡la web te espera! 💪</p>';
+                }
+                quizResultsDiv.innerHTML = resultsHtml;
+                quizResultsDiv.style.display = 'block';
+
+                // Deshabilitar los radios y el botón después de enviar
+                document.querySelectorAll('.interactive-quiz input[type="radio"]').forEach(radio => {
+                    radio.disabled = true;
+                });
+                document.querySelector('.interactive-quiz button').disabled = true;
+
+            } else {
+                quizResultsDiv.innerHTML = '<p style="color: orange;">Por favor, responde todas las preguntas antes de enviar.</p>';
+                quizResultsDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
