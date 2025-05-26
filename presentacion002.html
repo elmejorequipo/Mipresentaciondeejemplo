@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Mi Presentación Minimalista y Gamificada</title>
+
+    <meta name="description" content="Una presentación HTML interactiva y gamificada con estilo minimalista, creada como un solo archivo.">
+    <meta name="author" content="Tu Nombre o Equipo">
+    <meta property="og:title" content="Aventura del Conocimiento Minimalista">
+    <meta property="og:description" content="Descubre y aprende de forma divertida con desafíos interactivos.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1509343256510-09b30c18b284?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDV8fGZvY3VzJTIwb24lMjBib29rc3xlbnwwfHx8fDE3MTY3NTk1MTl8MA%3D%3D&ixlib=rb-4.0.3&q=80&w=600">
+    <meta property="og:url" content="https://elmejor_equipo.github.io/Mi-presentaciondeejemplo/mi_super_presentacion.html">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="https://i.imgur.com/3Y2F5wN.png" type="image/png"> 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/simple.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css">
+
+    <style>
+        /* Variables CSS para consistencia de colores y fuentes (mejor práctica para mantener el estilo) */
+        :root {
+            --primary-color: #3498db; /* Azul vibrante */
+            --secondary-color: #2ecc71; /* Verde esmeralda */
+            --accent-color: #f1c40f;   /* Amarillo para énfasis */
+            --text-color-dark: #333;
+            --text-color-light: #ecf0f1; /* Blanco grisáceo */
+            --bg-dark: #2c3e50; /* Azul oscuro */
+            --bg-light: #ecf0f1; /* Gris muy claro */
+            --font-main: 'Segoe UI', Arial, sans-serif;
+            --font-heading: 'Montserrat', sans-serif;
+        }
+
+        /* Estilos generales para el cuerpo y fuentes */
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--text-color-dark); /* Color de texto por defecto */
+        }
+        .reveal {
+            background-color: var(--bg-light); /* Fondo predeterminado claro para minimalismo */
+        }
+        /* Estilos para títulos */
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: var(--font-heading);
+            color: var(--primary-color); /* Títulos en azul vibrante */
+            text-shadow: none; /* Eliminar sombras para un look más plano/minimalista */
+            margin-bottom: 0.5em;
+        }
+        .reveal section p, .reveal section ul, .reveal section ol {
+            font-size: 1.1em; /* Ajusta tamaño de fuente para legibilidad */
+            line-height: 1.6;
+            margin-bottom: 1em;
+            color: var(--text-color-dark);
+        }
+        .reveal .slides section[data-background-color] h1,
+        .reveal .slides section[data-background-color] h2,
+        .reveal .slides section[data-background-color] p,
+        .reveal .slides section[data-background-color] li,
+        .reveal .slides section[data-background-color] a {
+            color: var(--text-color-light); /* Texto claro en fondos oscuros */
+        }
+        .reveal .slides section[data-background-color] a {
+            color: var(--accent-color); /* Enlaces en acento amarillo */
+        }
+
+        /* Estilos para imágenes */
+        .reveal section img {
+            max-height: 50vh; /* Ajusta la altura máxima de las imágenes */
+            max-width: 90%; /* Ajusta el ancho máximo */
+            border: 2px solid rgba(0, 0, 0, 0.1); /* Borde sutil */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Sombra suave para profundidad */
+            transition: transform 0.3s ease-in-out;
+            margin: 20px 0;
+            border-radius: 8px; /* Bordes ligeramente redondeados */
+        }
+        .reveal section img:hover {
+            transform: scale(1.02); /* Ligeramente más grande al pasar el ratón */
+        }
+
+        /* Estilos para elementos destacados */
+        .highlight {
+            color: var(--secondary-color); /* Verde esmeralda para el resaltado */
+            font-weight: bold;
+        }
+        
+        /* Animaciones simples para la entrada de contenido */
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-slide {
+            animation: fadeInSlide 0.8s ease-out forwards;
+        }
+        .fragment.fade-in { animation-delay: 0.3s; } /* Retraso para fragmentos */
+
+        /* Estilos para el contador de puntos (minimalista) */
+        #points-display {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        #points-display:hover {
+            background-color: #2980b9;
+        }
+
+        /* Estilos para contenedores de preguntas y botones */
+        .question-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 25px;
+            color: var(--text-color-dark);
+        }
+        .question-container p {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .game-button {
+            background-color: var(--secondary-color); /* Verde esmeralda */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 1.1em;
+            margin: 8px 4px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .game-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-1px);
+        }
+        .game-button:active {
+            transform: translateY(0);
+        }
+        .game-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .feedback-message {
+            margin-top: 20px;
+            font-size: 1.4em;
+            font-weight: bold;
+            animation: fadeInSlide 0.5s ease-out; /* Animación para el mensaje de feedback */
+        }
+        .feedback-message.correct {
+            color: var(--secondary-color); /* Verde */
+        }
+        .feedback-message.incorrect {
+            color: #e74c3c; /* Rojo */
+        }
+
+        /* Estilo para bloques de código */
+        pre code {
+            background-color: #272822 !important; /* Tema Monokai */
+            padding: 15px !important;
+            border-radius: 8px !important;
+            font-size: 0.85em !important;
+            line-height: 1.4 !important;
+            overflow-x: auto; /* Para código largo */
+        }
+
+        /* Estilo para el botón de inicio */
+        #start-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.8em;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+        #start-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        #start-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Estilos para enlaces de recursos */
+        .resource-link {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--text-color-dark);
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .resource-link:hover {
+            background-color: #f39c12;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div id="points-display">Puntos: <span id="current-points">0</span></div>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section data-background-image="https://images.unsplash.com/photo-1547493393-87000e470878?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDExfHxtaW5pbWFsaXN0JTIwYmFja2dyb3VuZCUyMGFic3RyYWN0fGVufDB8fHx8fDE3MTY3ODg5NzZ8MA&ixlib=rb-4.0.3&q=80&w=1920" data-background-size="cover" data-background-position="center" data-background-color="var(--bg-dark)">
+                <h1 class="fade-in">🚀 ¡Comienza tu Aventura del Conocimiento! 🚀</h1>
+                <p class="fade-in fade-in-delay-1" style="color: var(--text-color-light);">Desafíos, aprendizaje y ¡muchos puntos!</p>
+                <img src="https://images.unsplash.com/photo-1616422336336-398d5c41492b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDIyfHxnYW1lZmljYXRpb258ZW58MHx8fHwxNzE2NzU5NDI5fDA&ixlib=rb-4.0.3&q=80&w=300" alt="Icono de Gamificación" class="fade-in fade-in-delay-2" style="max-height: 15vh; border: none; box-shadow: none;">
+                <button id="start-button" onclick="Reveal.slide(1);">¡Iniciar Juego!</button>
+                <p style="font-size: 0.8em; color: rgba(255,255,255,0.7); margin-top: 20px;">(Imagen de Unsplash por @vackground)</p>
+            </section>
+
+            <section data-background-color="var(--bg-light)">
+                <h2>📚 ¿Qué Te Espera?</h2>
+                <p>Esta aventura está diseñada para poner a prueba tu conocimiento y ayudarte a crecer.</p>
+                <ul class="fade-in-slide">
+                    <li class="fragment">🎯 Desafíos Interactivos.</li>
+                    <li class="fragment">✨ Puntos por cada éxito.</li>
+                    <li class="fragment">💡 Contenido clave en cada nivel.</li>
+                    <li class="fragment">🔗 Recursos adicionales para explorar.</li>
+                </ul>
+                <img src="https://images.unsplash.com/photo-1546410531-dd23efc97c11?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDR8fGNhcmRzJTIwZ2FtZXN8ZW58MHx8fHwxNzE2Nzg5MDc2fDA&ixlib=rb-4.0.3&q=80&w=400" alt="Juego de cartas" style="max-height: 25vh;">
+            </section>
+
+            <section data-background-color="var(--bg-dark)">
+                <h2>🌳 Nivel 1: Los Cimientos Digitales</h2>
+                <h3 style="color: var(--accent-color);">Explorando la Esencia de la Programación</h3>
+                <p>En este nivel, revisaremos los conceptos más importantes para empezar:</p>
+                <ul style="color: var(--text-color-light);">
+                    <li class="fragment">El valor de los <span class="highlight">Algoritmos</span>.</li>
+                    <li class="fragment">¿Qué son los <span class="highlight">Datos</span> y cómo se organizan?</li>
+                    <li class="fragment">Introducción a <span class="highlight">HTML, CSS y JavaScript</span>.</li>
+                </ul>
+                <img src="https://images.unsplash.com/photo-1550439002-ce4679791090?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDV8fGNvZGluZyUyMGNvbmNlcHRzJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3MTY3ODkzMDZ8MA&ixlib=rb-4.0.3&q=80&w=400" alt="Conceptos de programación" style="max-height: 25vh;">
+            </section>
+
+            <section data-background-color="var(--bg-light)">
+                <h2>❓ Desafío Nivel 1: Lógica Fundamental (20 Puntos)</h2>
+                <div class="question-container" data-question-id="q1">
+                    <p>Un algoritmo es una serie de pasos para resolver un problema. ¿Verdadero o Falso? 🤔</p>
+                    <button class="game-button" data-answer="correct">Verdadero ✅</button>
+                    <button class="game-button" data-answer="incorrect">Falso ❌</button>
+                    <p class="feedback-message" style="display:none;"></p>
+                </div>
+            </section>
+
+            <section data-background-color="var(--bg-dark)">
+                <h2>🔗 Recurso Extra: Fundamentos</h2>
+                <p style="color: var(--text-color-light);">¿Quieres profundizar en los conceptos básicos?</p>
+                <p style="color: var(--text-color-light);">Explora este artículo introductorio:</p>
+                <a href="https://www.freecodecamp.org/news/what-is-programming-definition-and-how-to-start-coding/" target="_blank" class="resource-link">
+                    Aprende sobre Programación en FreeCodeCamp 🚀
+                </a>
+                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDEzfHxjb2Rpbmd8ZW58MHx8fHwxNzE2NzU5NDc1fDA&ixlib=rb-4.0.3&q=80&w=400" alt="Recursos de aprendizaje" style="max-height: 25vh;">
+            </section>
+
+            <section id="level-1-outcome" data-background-color="#4B0082" data-transition="zoom">
+                <h2>Resultados del Nivel 1</h2>
+                <p id="level-1-message" style="font-size: 2em; color: var(--text-color-light);"></p>
+                <img id="level-1-img" src="" alt="Resultado del Nivel" style="max-height: 30vh; border: none; box-shadow: none;">
+                <button class="game-button" onclick="Reveal.slide(Reveal.getIndices().h + 1);">Continuar Aventura ➡️</button>
+            </section>
+
+            <section data-background-image="https://images.unsplash.com/photo-1542831371-29b0f74f9713?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDEwfHxmcm9udGVuZCUyMGRldmVsb3BtZW50fGVufDB8fHx8fDE3MTY3ODk1Njl8MA&ixlib=rb-4.0.3&q=80&w=1920" data-background-size="cover" data-background-position="center" data-background-color="var(--bg-dark)" data-background-opacity="0.7">
+                <h2>💻 Nivel 2: El Arte de la Interfaz</h2>
+                <h3 style="color: var(--accent-color); text-shadow: 1px 1px 2px black;">Creando Experiencias Visuales</h3>
+                <ul style="color: var(--text-color-light); text-shadow: 1px 1px 2px black;">
+                    <li class="fragment">Estructura con HTML5.</li>
+                    <li class="fragment">Estilo con CSS3.</li>
+                    <li class="fragment">Interactividad con JavaScript.</li>
+                </ul>
+                <p style="font-size: 0.8em; color: rgba(255,255,255,0.7); margin-top: 20px;">(Imagen de Unsplash por @altumcode)</p>
+            </section>
+
+            <section data-background-color="var(--bg-light)">
+                <h2>🎥 Mira: ¿Qué hace un Desarrollador Front-end?</h2>
+                <p>Un video corto para inspirarte:</p>
+                <div style="aspect-ratio: 16/9; width: 80%; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&controls=1&showinfo=0&rel=0" width="100%" height="100%" frameborder="0" allowfullscreen title="Video sobre Desarrollo Front-end"></iframe>
+                </div>
+                <p style="font-size: 0.8em; margin-top: 15px;">(Este es un video de ejemplo, reemplaza la URL src para uno más relevante)</p>
+            </section>
+            
+            <section data-background-color="var(--bg-dark)">
+                <h2>❓ Desafío Nivel 2: Estructura Web (30 Puntos)</h2>
+                <div class="question-container" data-question-id="q2">
+                    <p style="color: var(--text-color-dark);">¿Qué lenguaje se utiliza para dar estilo y apariencia a una página web? 🤔</p>
+                    <button class="game-button" data-answer="incorrect">JavaScript ⚡</button>
+                    <button class="game-button" data-answer="correct">CSS 🎨</button>
+                    <button class="game-button" data-answer="incorrect">HTML 🏗️</button>
+                    <p class="feedback-message" style="display:none;"></p>
+                </div>
+            </section>
+
+            <section data-background-color="var(--bg-light)">
+                <h2>🔗 Recurso Extra: CSS Avanzado</h2>
+                <p>Descubre el poder de CSS para crear diseños increíbles:</p>
+                <a href="https://developer.mozilla.org/es/docs/Web/CSS" target="_blank" class="resource-link">
+                    Documentación MDN sobre CSS 📚
+                </a>
+                <img src="https://images.unsplash.com/photo-1542744095-2917ecc216e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDE2fHx3ZWIlMjBkZXZlbG9wbWVudHxlbnwwfHx8fDE3MTY3NTk3NTh8MA&ixlib=rb-4.0.3&q=80&w=400" alt="Recursos de CSS" style="max-height: 25vh;">
+            </section>
+
+            <section id="level-2-outcome" data-background-color="#008080" data-transition="zoom">
+                <h2>Resultados del Nivel 2</h2>
+                <p id="level-2-message" style="font-size: 2em; color: var(--text-color-light);"></p>
+                <img id="level-2-img" src="" alt="Resultado del Nivel" style="max-height: 30vh; border: none; box-shadow: none;">
+                <button class="game-button" onclick="Reveal.slide(Reveal.getIndices().h + 1);">¡Último Estirón! 💪</button>
+            </section>
+
+            <section data-background-image="https://images.unsplash.com/photo-1510519124483-36c567848e1e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDEyfHxwcm9qZWN0JTIwY29tcGxldGlvbnxlbnwwfHx8fDE3MTY3ODkzMDZ8MA&ixlib=rb-4.0.3&q=80&w=1920" data-background-size="cover" data-background-position="center" data-background-color="var(--bg-dark)" data-background-opacity="0.8">
+                <h2>🚀 Nivel Final: Maestría y Creación</h2>
+                <h3 style="color: var(--accent-color); text-shadow: 1px 1px 2px black;">Tu Proyecto, tu Legado</h3>
+                <p style="color: var(--text-color-light); text-shadow: 1px 1px 2px black;">Es hora de aplicar todo lo aprendido y construir algo propio.</p>
+                <ul style="color: var(--text-color-light); text-shadow: 1px 1px 2px black;">
+                    <li class="fragment">Planificación y Diseño.</li>
+                    <li class="fragment">Implementación y Codificación.</li>
+                    <li class="fragment">¡Prueba y Lanza!</li>
+                </ul>
+                <img src="https://images.unsplash.com/photo-1549492194-c7a36e4f3a74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDM3fHxwcm9ncmVzc3xlbnwwfHx8fDE3MTY3NjAwNzd8MA&ixlib=rb-4.0.3&q=80&w=400" alt="Objetivo final" style="max-height: 25vh;">
+            </section>
+
+            <section data-background-color="var(--bg-light)">
+                <h2>❓ Desafío Final: Sabiduría del Maestro (50 Puntos)</h2>
+                <div class="question-container" data-question-id="q3">
+                    <p>En el desarrollo web, ¿qué es un "framework" como Reveal.js? 🤔</p>
+                    <button class="game-button" data-answer="incorrect">Un error de programación.</button>
+                    <button class="game-button" data-answer="correct">Un conjunto de herramientas y guías para construir aplicaciones.</button>
+                    <button class="game-button" data-answer="incorrect">Un tipo de archivo de imagen.</button>
+                    <p class="feedback-message" style="display:none;"></p>
+                </div>
+            </section>
+
+            <section data-background-color="var(--bg-dark)">
+                <h2>🔗 Inspiración para tu Proyecto</h2>
+                <p style="color: var(--text-color-light);">¡Descubre proyectos de código abierto para inspirarte!</p>
+                <a href="https://github.com/showcases" target="_blank" class="resource-link">
+                    Explora Showcases en GitHub 💡
+                </a>
+                <img src="https://images.unsplash.com/photo-1510519124483-36c567848e1e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDEyfHxwcm9qZWN0JTIwY29tcGxldGlvbnxlbnwwfHx8fDE3MTY3ODkzMDZ8MA&ixlib=rb-4.0.3&q=80&w=400" alt="Inspiración de proyectos" style="max-height: 25vh;">
+            </section>
+
+            <section data-background-color="var(--bg-dark)">
+                <h2>📊 Tu Rendimiento Final</h2>
+                <p style="font-size: 2em; color: var(--text-color-light);">Puntos Totales Obtenidos: <span id="final-points-summary" style="font-size: 1.5em; color: var(--accent-color);">0</span></p>
+                <p id="final-achievement-message" style="font-size: 1.5em; color: var(--text-color-light);"></p>
+                <img id="final-achievement-img" src="" alt="Resultado Final" style="max-height: 35vh;">
+            </section>
+
+            <section data-background-color="var(--bg-light)">
+                <h1>¡Felicidades, Aventurero! 🎉</h1>
+                <p>Has completado esta Aventura del Conocimiento.</p>
+                <p>¡Esperamos que hayas disfrutado y aprendido mucho! 😉</p>
+                <p>¿Preguntas o comentarios? Contáctame:</p>
+                <p>📧 Email: <a href="mailto:tu.correo@example.com" style="color: var(--primary-color);">tu.correo@example.com</a></p>
+                <p>🌐 Tu Presentación en Línea: <a href="https://elmejor_equipo.github.io/Mi-presentaciondeejemplo/mi_super_presentacion.html" target="_blank" style="color: var(--primary-color);">Ver Aventura</a></p>
+                <img src="https://images.unsplash.com/photo-1549492194-c7a36e4f3a74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDM3fHxwcm9ncmVzc3xlbnwwfHx8fDE3MTY3NjAwNzd8MA&ixlib=rb-4.0.3&q=80&w=300" alt="Fin de la aventura" style="max-height: 20vh;">
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+    <script>
+        // --- Variables Globales para la Gamificación ---
+        let currentPoints = 0; 
+        // Se obtiene el elemento de puntos. Se verifica su existencia antes de usarlo.
+        const pointsDisplay = document.getElementById('current-points'); 
+        if (!pointsDisplay) {
+            console.error("Error: Elemento 'points-display' o 'current-points' no encontrado. El contador de puntos no funcionará.");
+            // Si el elemento no existe, podemos salir o poner una variable ficticia
+            // para evitar errores posteriores. Aquí, simplemente se registrará el error.
+        }
+
+        const questionsAttempted = {}; 
+
+        const quizQuestions = {
+            'q1': { points: 20, correctMsg: '¡Correcto! Los algoritmos son la base.', incorrectMsg: 'Incorrecto. Los algoritmos son secuencias de pasos.' },
+            'q2': { points: 30, correctMsg: '¡Así es! CSS es el estilista web.', incorrectMsg: 'Incorrecto. CSS controla la apariencia.' },
+            'q3': { points: 50, correctMsg: '¡Excelente! Los frameworks facilitan el desarrollo.', incorrectMsg: 'No del todo. Un framework es una estructura para crear.' }
+        };
+
+        // --- Funciones de Gamificación ---
+
+        /**
+         * Actualiza el contador de puntos en la interfaz de usuario.
+         * Se llama cada vez que los puntos cambian.
+         * Incluye verificación para asegurar que el elemento existe.
+         */
+        function updatePointsDisplay() {
+            if (pointsDisplay) { // Verificar si el elemento existe antes de acceder a él
+                pointsDisplay.textContent = currentPoints;
+            }
+        }
+
+        /**
+         * Maneja la lógica cuando el usuario selecciona una respuesta a una pregunta.
+         * Muestra feedback, actualiza puntos y deshabilita botones para evitar múltiples respuestas.
+         * Incluye verificaciones para evitar errores si los elementos no se encuentran.
+         * @param {HTMLElement} button - El botón de respuesta que fue clickeado.
+         * @param {string} questionId - El ID de la pregunta actual (ej. 'q1').
+         */
+        function handleAnswer(button, questionId) {
+            try { // Usamos un bloque try-catch para atrapar errores dentro de esta función
+                // Si la pregunta ya ha sido respondida, salimos de la función.
+                if (questionsAttempted[questionId]) {
+                    return; 
+                }
+
+                const isCorrect = button.dataset.answer === 'correct';
+                // Usamos `closest` para encontrar el contenedor de la pregunta
+                const questionContainer = button.closest('.question-container');
+                if (!questionContainer) { // Verificar si el contenedor fue encontrado
+                    console.error("Error: Contenedor de pregunta no encontrado para el botón.", button);
+                    return;
+                }
+
+                const feedbackMessageElement = questionContainer.querySelector('.feedback-message');
+                if (!feedbackMessageElement) { // Verificar si el elemento de feedback existe
+                    console.error("Error: Elemento de mensaje de feedback no encontrado en el contenedor de la pregunta.", questionContainer);
+                    return;
+                }
+                
+                const questionInfo = quizQuestions[questionId]; 
+                if (!questionInfo) { // Verificar si la información de la pregunta existe
+                    console.error(`Error: Información de pregunta no encontrada para ID: ${questionId}`);
+                    return;
+                }
+
+                // Mostrar feedback
+                feedbackMessageElement.style.display = 'block';
+                if (isCorrect) {
+                    feedbackMessageElement.className = 'feedback-message correct';
+                    feedbackMessageElement.textContent = questionInfo.correctMsg + ` (+${questionInfo.points} Puntos!) 🥳`;
+                    currentPoints += questionInfo.points;
+                    questionsAttempted[questionId] = true;
+                } else {
+                    feedbackMessageElement.className = 'feedback-message incorrect';
+                    feedbackMessageElement.textContent = questionInfo.incorrectMsg + ` 😔`;
+                }
+
+                updatePointsDisplay();
+
+                // Deshabilita todos los botones de la pregunta para evitar más clics
+                const buttonsInQuestion = questionContainer.querySelectorAll('.game-button');
+                buttonsInQuestion.forEach(btn => btn.disabled = true);
+
+            } catch (e) {
+                console.error("Error en handleAnswer:", e);
+            }
+        }
+
+        /**
+         * Evalúa el resultado de un nivel (o sección) y actualiza la diapositiva de resultado.
+         * Incluye verificaciones para asegurar que los elementos HTML existan.
+         */
+        function evaluateLevelOutcome(levelId, minPoints, successMessage, failMessage, successImg, failImg) {
+            const messageElement = document.getElementById(`${levelId}-message`);
+            const imageElement = document.getElementById(`${levelId}-img`);
+
+            if (!messageElement || !imageElement) {
+                console.error(`Error: Elementos de resultado de nivel (${levelId}-message o ${levelId}-img) no encontrados.`);
+                return;
+            }
+
+            if (currentPoints >= minPoints) {
+                messageElement.textContent = successMessage;
+                messageElement.style.color = 'var(--secondary-color)';
+                imageElement.src = successImg;
+                imageElement.alt = "Nivel Superado";
+            } else {
+                messageElement.textContent = failMessage;
+                messageElement.style.color = '#e74c3c';
+                imageElement.src = failImg;
+                imageElement.alt = "Nivel No Superado";
+            }
+        }
+
+        /**
+         * Maneja el resultado final de la presentación al llegar a la última diapositiva de resultados.
+         * Incluye verificaciones para asegurar que los elementos HTML existan.
+         */
+        function handleFinalOutcome() {
+            const finalPointsSummary = document.getElementById('final-points-summary');
+            const finalAchievementMessage = document.getElementById('final-achievement-message');
+            const finalAchievementImg = document.getElementById('final-achievement-img');
+            
+            if (!finalPointsSummary || !finalAchievementMessage || !finalAchievementImg) {
+                console.error("Error: Elementos de resultado final (final-points-summary, final-achievement-message o final-achievement-img) no encontrados.");
+                return;
+            }
+
+            finalPointsSummary.textContent = currentPoints;
+
+            const maxPossiblePoints = Object.values(quizQuestions).reduce((sum, q) => sum + q.points, 0);
+            
+            if (currentPoints === maxPossiblePoints) {
+                finalAchievementMessage.textContent = `¡Logro Épico! Has obtenido la puntuación máxima (${currentPoints}/${maxPossiblePoints} Puntos). ¡Eres un verdadero Maestro! 🎉`;
+                finalAchievementMessage.style.color = 'var(--accent-color)';
+                finalAchievementImg.src = 'https://images.unsplash.com/photo-1549492194-c7a36e4f3a74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDM3fHxwcm9ncmVzc3xlbnwwfHx8fDE3MTY3NjAwNzd8MA%3D%3D&ixlib=rb-4.0.3&q=80&w=400';
+                finalAchievementImg.alt = "Maestría total";
+            } else if (currentPoints >= maxPossiblePoints * 0.7) { 
+                finalAchievementMessage.textContent = `¡Excelente trabajo! Has logrado ${currentPoints}/${maxPossiblePoints} Puntos. ¡Sigue así! 🌟`;
+                finalAchievementMessage.style.color = 'var(--secondary-color)';
+                finalAchievementImg.src = 'https://images.unsplash.com/photo-1550592965-0b0439589d89?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDl8fGNlbGVicmF0aW9uJTIwd2ViY2FtJTIwcGFydHl8ZW58MHx8fHwxNzE2NzU5NzYyfDA%3D&ixlib=rb-4.0.3&q=80&w=400';
+                finalAchievementImg.alt = "Buen trabajo";
+            } else {
+                finalAchievementMessage.textContent = `Puedes mejorar. Obtuviste ${currentPoints}/${maxPossiblePoints} Puntos. ¡No te rindas! 📚`;
+                finalAchievementMessage.style.color = '#e74c3c';
+                finalAchievementImg.src = 'https://images.unsplash.com/photo-1605374523725-b1a7ac3369a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDV8fGZhaWx1cmV8ZW58MHx8fHwxNzE2NzU5OTkwfDA%3D&ixlib=rb-4.0.3&q=80&w=400';
+                finalAchievementImg.alt = "Necesitas más práctica";
+            }
+        }
+
+        // --- Inicialización de Reveal.js y Lógica de Eventos ---
+        // Se envuelve la inicialización en un try-catch para atrapar errores tempranos
+        try {
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                hash: true,
+                transition: 'slide',
+                plugins: [ RevealHighlight ] // Asegúrate de que RevealHighlight esté definido o importado
+            });
+
+            // Event listener que se ejecuta cuando Reveal.js ha terminado de cargar.
+            Reveal.on('ready', () => {
+                updatePointsDisplay(); 
+
+                // Asigna los event listeners a todos los botones de respuesta de las preguntas.
+                document.querySelectorAll('.question-container').forEach(container => {
+                    const questionId = container.dataset.questionId;
+                    const buttons = container.querySelectorAll('.game-button');
+                    buttons.forEach(button => {
+                        // Asegúrate de que el botón y la función existen
+                        if (button && typeof handleAnswer === 'function') {
+                            button.onclick = () => handleAnswer(button, questionId);
+                        }
+                    });
+                });
+
+                // Asegurar que el resaltado de código se aplique después de que Reveal.js esté listo
+                // y si la librería hljs está disponible.
+                if (typeof hljs !== 'undefined') {
+                    hljs.highlightAll();
+                } else {
+                    console.warn("Advertencia: Highlight.js no está disponible para resaltar código.");
+                }
+            });
+
+            // Event listener que se dispara cada vez que se cambia de diapositiva.
+            Reveal.on('slidechanged', event => {
+                // Evaluar Nivel 1 después de la diapositiva de pregunta q1 (Diapositiva 4)
+                if (event.indexh === 5) { // Índice horizontal de la diapositiva de resultado del Nivel 1
+                    evaluateLevelOutcome(
+                        'level-1', 
+                        20, // Puntos mínimos requeridos para "aprobar" el Nivel 1
+                        `¡Nivel 1 Superado! Tienes ${currentPoints} puntos. Sigue así.`, 
+                        `Aún no. Necesitas ${20 - currentPoints} puntos más en el Nivel 1.`,
+                        'https://images.unsplash.com/photo-1526478832049-7c1341c2c366?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDIwfHxwYXNzZWQlMjBsZXZlbHxlbnwwfHx8fDE3MTY3NTk5NjB8MA%3D%3D&ixlib=rb-4.0.3&q=80&w=400',
+                        'https://images.unsplash.com/photo-1605374523725-b1a7ac3369a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDV8fGZhaWx1cmV8ZW58MHx8fHwxNzE2NzU5OTkwfDA%3D&ixlib=rb-4.0.3&q=80&w=400'
+                    );
+                }
+                // Evaluar Nivel 2 después de la diapositiva de pregunta q2 (Diapositiva 9)
+                if (event.indexh === 10) { 
+                    evaluateLevelOutcome(
+                        'level-2', 
+                        50, // 20 (Q1) + 30 (Q2) = 50 puntos acumulados
+                        `¡Nivel 2 Desbloqueado! Tienes ${currentPoints} puntos. ¡Casi lo logras!`, 
+                        `Aún te falta para el Nivel 2. Tienes ${currentPoints} puntos.`,
+                        'https://images.unsplash.com/photo-1549492194-c7a36e4f3a74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDM3fHxwcm9ncmVzc3xlbnwwfHx8fDE3MTY3NjAwNzd8MA%3D%3D&ixlib=rb-4.0.3&q=80&w=400',
+                        'https://images.unsplash.com/photo-1587372439564-92718e227038?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MjE3OHwwfDF8c2VhcmNofDE3fHxmYWlsdXJlfGVufDB8fHx8MTcxNjc1OTk5MHww%3D&ixlib=rb-4.0.3&q=80&w=400'
+                    );
+                }
+                // Evaluar Resultado Final después de la diapositiva de pregunta q3 (Diapositiva 13)
+                if (event.indexh === 14) { 
+                    handleFinalOutcome(); 
+                }
+            });
+        } catch (initializationError) {
+            console.error("Error crítico al inicializar Reveal.js o en los scripts iniciales:", initializationError);
+            // Mostrar un mensaje de error visible al usuario si esto ocurre
+            document.body.innerHTML = `
+                <div style="text-align: center; margin-top: 50px; font-family: sans-serif; color: #e74c3c;">
+                    <h1>¡Oops! Ha ocurrido un error.</h1>
+                    <p>No podemos cargar la presentación. Por favor, inténtalo de nuevo más tarde o revisa la consola para detalles.</p>
+                    <p>Error: ${initializationError.message}</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
