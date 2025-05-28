@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos de las Ecuaciones Cuadráticas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Material+Icons&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Google Sans', sans-serif;
+            color: #1a73e8; /* Google Blue */
+        }
+
+        .header-bg {
+            background-color: #1a73e8; /* Google Blue */
+            color: white;
+        }
+
+        .section-card {
+            background-color: #ffffff;
+            border-left: 5px solid #1a73e8; /* Google Blue */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .section-card.expanded {
+            border-left: 5px solid #34a853; /* Google Green */
+        }
+
+        .section-card-header {
+            cursor: pointer;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            padding: 0 1.5rem;
+        }
+
+        .section-card.expanded .section-card-content {
+            max-height: 1000px; /* Adjust as needed for content length */
+            padding-bottom: 1.5rem;
+        }
+
+        .icon-list-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .icon-list-item .icon-container {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e8f0fe; /* Light Google Blue */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+        }
+
+        .icon-list-item .icon-container .material-icons {
+            color: #1a73e8; /* Google Blue */
+            font-size: 24px;
+        }
+
+        .quiz-option:hover {
+            background-color: #e6e6e6;
+        }
+
+        .quiz-option.selected {
+            background-color: #cce0ff; /* Light blue for selected */
+            border-color: #1a73e8;
+        }
+
+        .quiz-option.correct {
+            background-color: #e6ffe6; /* Light green for correct */
+            border-color: #34a853;
+        }
+
+        .quiz-option.incorrect {
+            background-color: #ffe6e6; /* Light red for incorrect */
+            border-color: #ea4335;
+        }
+
+        .feedback {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .feedback.correct {
+            background-color: #e6ffe6;
+            color: #34a853;
+        }
+
+        .feedback.incorrect {
+            background-color: #ffe6e6;
+            color: #ea4335;
+        }
+
+        .activity-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .activity-card h3 {
+            color: #4285f4; /* Google Blue */
+            margin-bottom: 1rem;
+        }
+
+        .activity-card input[type="text"],
+        .activity-card textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            box-sizing: border-box; /* Ensures padding doesn't add to width */
+        }
+
+        .activity-card button {
+            background-color: #4285f4; /* Google Blue */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .activity-card button:hover {
+            background-color: #3478e8;
+        }
+
+        .matching-pair {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .matching-pair .concept {
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .matching-pair select {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-left: 1rem;
+        }
+
+        .true-false-question {
+            margin-bottom: 1rem;
+        }
+
+        .true-false-question label {
+            margin-right: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <immersive id="quadratic-equations-mooc" title="Fundamentos de las Ecuaciones Cuadráticas">
+        <header class="header-bg py-8 shadow-md">
+            <div class="container mx-auto px-4 text-center">
+                <h1 id="module-title" class="text-4xl font-bold mb-2"></h1>
+                <p id="module-description" class="text-xl opacity-90 mb-4"></p>
+                <div class="flex flex-col md:flex-row justify-center items-center text-sm opacity-80">
+                    <span id="professor-name" class="mr-4"></span>
+                    <span id="subject-name"></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto px-4 py-8">
+
+            <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-800">Video Introductorio</h2>
+                <div class="aspect-w-16 aspect-h-9 w-full bg-gray-200 rounded-lg overflow-hidden" style="position: relative; padding-bottom: 56.25%;">
+                    <iframe id="youtube-video-player" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </section>
+
+            <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-800">Objetivos de Aprendizaje</h2>
+                <ul id="learning-objectives-list" class="list-disc pl-5 space-y-2 text-gray-700">
+                    </ul>
+            </section>
+
+            <section id="module-sections" class="mb-12 space-y-6">
+                <h2 class="text-2xl font-semibold mb-6 text-blue-800">Contenido del Módulo</h2>
+                </section>
+
+            <section id="module-activities" class="mb-12">
+                <h2 class="text-2xl font-semibold mb-6 text-blue-800">Actividades Prácticas</h2>
+
+                <div id="quiz-activity" class="activity-card hidden">
+                    <h3 class="text-xl font-bold mb-4">Cuestionario de Comprensión</h3>
+                    <p id="quiz-instruction" class="mb-4 text-gray-700"></p>
+                    <div id="quiz-questions-container">
+                        </div>
+                    <button onclick="checkQuiz()">Verificar Respuestas</button>
+                    <div id="quiz-summary" class="mt-4 font-semibold text-lg"></div>
+                </div>
+
+                <div id="exercise-activity" class="activity-card hidden">
+                    <h3 class="text-xl font-bold mb-4">Ejercicio de Resolución</h3>
+                    <p id="exercise-instruction" class="mb-4 text-gray-700"></p>
+                    <input type="text" id="exercise-input" class="p-2 border rounded" placeholder="">
+                    <button onclick="checkExercise()">Comprobar</button>
+                    <div id="exercise-feedback" class="mt-2"></div>
+                </div>
+
+                <div id="problem-solving-activity" class="activity-card hidden">
+                    <h3 class="text-xl font-bold mb-4">Problema de Aplicación</h3>
+                    <p id="problem-solving-instruction" class="mb-4 text-gray-700"></p>
+                    <textarea id="problem-solving-textarea" class="w-full p-2 border rounded h-32" placeholder=""></textarea>
+                    <button onclick="checkProblemSolving()">Comprobar</button>
+                    <div id="problem-solving-feedback" class="mt-2"></div>
+                </div>
+
+                <div id="matching-activity" class="activity-card hidden">
+                    <h3 class="text-xl font-bold mb-4">Actividad de Emparejamiento</h3>
+                    <p id="matching-instruction" class="mb-4 text-gray-700"></p>
+                    <div id="matching-pairs-container">
+                        </div>
+                    <button onclick="checkMatching()">Verificar Emparejamientos</button>
+                    <div id="matching-feedback" class="mt-2"></div>
+                </div>
+
+                <div id="true-false-activity" class="activity-card hidden">
+                    <h3 class="text-xl font-bold mb-4">Verdadero o Falso</h3>
+                    <p id="true-false-instruction" class="mb-4 text-gray-700"></p>
+                    <div id="true-false-questions-container">
+                        </div>
+                    <button onclick="checkTrueFalse()">Verificar Respuestas</button>
+                    <div id="true-false-feedback" class="mt-2"></div>
+                </div>
+            </section>
+
+            <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+                <h2 id="summary-title" class="text-2xl font-semibold mb-4 text-blue-800"></h2>
+                <ul id="summary-content-points" class="list-disc pl-5 space-y-2 text-gray-700">
+                    </ul>
+                <p id="summary-closing-remark" class="mt-4 italic text-gray-600"></p>
+            </section>
+
+            <section class="mb-12 bg-white p-6 rounded-lg shadow-md text-center">
+                <h2 id="conclusion-title" class="text-2xl font-semibold mb-4 text-blue-800"></h2>
+                <p id="conclusion-message" class="mb-4 text-lg text-gray-700"></p>
+                <p id="conclusion-call-to-action" class="font-bold text-xl text-green-600"></p>
+            </section>
+
+            <section class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-800">Bibliografía</h2>
+                <ul id="bibliography-list" class="list-disc pl-5 space-y-2 text-gray-700">
+                    </ul>
+            </section>
+
+        </main>
+
+        <script>
+            const moocData = {
+                "moduleInfo": {
+                    "title": "Fundamentos de las Ecuaciones Cuadráticas",
+                    "description": "Aprende a resolver ecuaciones cuadráticas, comprende los errores comunes y descubre sus aplicaciones en la vida real.",
+                    "professorName": "Dr. Sofia Matemáticas",
+                    "subjectName": "Matemáticas",
+                    "youtubeVideoId": "L_Y1GfM7YqM",
+                    "youtubeThumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg"
+                },
+                "learningObjectives": [
+                    "Identificar y clasificar ecuaciones cuadráticas.",
+                    "Resolver ecuaciones cuadráticas utilizando diferentes métodos (factorización, fórmula general).",
+                    "Reconocer y evitar errores comunes al resolver ecuaciones cuadráticas.",
+                    "Aplicar el concepto de ecuaciones cuadráticas en situaciones de la vida real."
+                ],
+                "sections": [
+                    {
+                        "id": "section1-1",
+                        "title": "¿Qué son las Ecuaciones Cuadráticas?",
+                        "contentParagraphs": [
+                            "Una ecuación cuadrática es una ecuación polinómica de segundo grado, lo que significa que el término de mayor grado es $x^2$. Su forma general es $ax^2 + bx + c = 0$, donde $a$, $b$ y $c$ son coeficientes, con $a \\neq 0$.",
+                            "Estas ecuaciones son fundamentales en álgebra y aparecen en diversas ramas de la ciencia y la ingeniería, desde la física hasta la economía."
+                        ],
+                        "image": {
+                            "url": "https://images.pexels.com/photos/4144922/pexels-photo-4144922.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+                            "altText": "Una pizarra con ecuaciones matemáticas escritas."
+                        },
+                        "codeBlock": "ax^2 + bx + c = 0\n  a: coeficiente cuadrático\n  b: coeficiente lineal\n  c: término independiente",
+                        "reflectionQuestion": "¿Dónde crees que podrías haber visto ecuaciones cuadráticas en tu vida diaria sin darte cuenta?",
+                        "iconListItems": null
+                    },
+                    {
+                        "id": "section1-2",
+                        "title": "Métodos de Resolución: Factorización",
+                        "contentParagraphs": [
+                            "La factorización es uno de los métodos más sencillos para resolver ecuaciones cuadráticas, especialmente cuando son completas y factorizables fácilmente. Se basa en encontrar dos binomios cuyo producto sea la ecuación cuadrática original.",
+                            "Para aplicar este método, la ecuación debe estar igualada a cero. Luego, se factoriza la expresión cuadrática y se iguala cada factor a cero para encontrar las soluciones (raíces)."
+                        ],
+                        "image": {
+                            "url": "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+                            "altText": "Persona escribiendo fórmulas matemáticas en una pizarra."
+                        },
+                        "codeBlock": "Ejemplo:\n  x^2 + 5x + 6 = 0\n  (x + 2)(x + 3) = 0\n  x + 2 = 0  =>  x = -2\n  x + 3 = 0  =>  x = -3",
+                        "reflectionQuestion": "¿Cuándo crees que la factorización es el método más eficiente para resolver una ecuación cuadrática?",
+                        "iconListItems": null
+                    },
+                    {
+                        "id": "section1-3",
+                        "title": "Métodos de Resolución: Fórmula General",
+                        "contentParagraphs": [
+                            "La fórmula general, también conocida como 'fórmula cuadrática' o 'fórmula del estudiante', es un método universal que permite resolver cualquier ecuación cuadrática, incluso aquellas que no son factorizables.",
+                            "La fórmula es $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$. El término $b^2 - 4ac$ se llama discriminante y determina la naturaleza de las soluciones (raíces reales distintas, raíces reales iguales o raíces complejas)."
+                        ],
+                        "image": {
+                            "url": "https://images.pexels.com/photos/5903939/pexels-photo-5903939.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+                            "altText": "Una calculadora científica mostrando una ecuación."
+                        },
+                        "codeBlock": "Fórmula General:\n  x = (-b ± sqrt(b^2 - 4ac)) / 2a\n\n  Discriminante (Δ):\n  Δ = b^2 - 4ac",
+                        "reflectionQuestion": "¿Por qué es importante el discriminante en la fórmula general para comprender las soluciones de una ecuación cuadrática?",
+                        "iconListItems": [
+                            {
+                                "iconClass": "icon-idea",
+                                "heading": "Consejo Práctico",
+                                "description": "Siempre identifica $a$, $b$ y $c$ correctamente antes de aplicar la fórmula general para evitar errores.",
+                                "useCase": "Caso de uso: En un examen, un estudiante puede equivocarse al asignar los valores de $a$, $b$ y $c$ si la ecuación no está en su forma estándar. La IA puede recordarle este paso crucial."
+                            },
+                            {
+                                "iconClass": "icon-quiz",
+                                "heading": "Comprobación de Soluciones",
+                                "description": "Una vez que tengas las soluciones, sustitúyelas en la ecuación original para verificar que son correctas.",
+                                "useCase": "Caso de uso: Un alumno resuelve una ecuación compleja y no está seguro de su respuesta. La IA puede sugerirle cómo realizar una verificación rápida."
+                            }
+                        ]
+                    },
+                    {
+                        "id": "section1-4",
+                        "title": "Errores Comunes al Resolver Ecuaciones Cuadráticas",
+                        "contentParagraphs": [
+                            "Es fácil cometer errores al trabajar con ecuaciones cuadráticas, especialmente con los signos o al aplicar la fórmula general. Uno de los errores más frecuentes es olvidar que la $x$ puede tener dos soluciones.",
+                            "Otro error común es manejar incorrectamente el discriminante, especialmente cuando es negativo, lo que indica soluciones complejas. También es vital recordar que $a$ no puede ser cero."
+                        ],
+                        "image": {
+                            "url": "https://images.pexels.com/photos/6256038/pexels-photo-6256038.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+                            "altText": "Mano borrando un error en una pizarra."
+                        },
+                        "codeBlock": "// Errores a evitar:\n// 1. Olvidar las dos soluciones (±).\n// 2. Errores de signo con -b o -4ac.\n// 3. Dividir solo un término por 2a.\n// 4. Calcular mal el discriminante.",
+                        "reflectionQuestion": "¿Qué estrategias podrías usar para evitar los errores comunes que se presentan al resolver ecuaciones cuadráticas?",
+                        "iconListItems": null
+                    },
+                    {
+                        "id": "section1-5",
+                        "title": "Aplicaciones de las Ecuaciones Cuadráticas en la Vida Real",
+                        "contentParagraphs": [
+                            "Las ecuaciones cuadráticas no son solo un concepto abstracto; tienen aplicaciones prácticas en muchos campos. Por ejemplo, en física, se usan para describir la trayectoria de proyectiles o el movimiento de objetos en caída libre.",
+                            "En ingeniería y arquitectura, se utilizan para diseñar estructuras parabólicas, como puentes colgantes o antenas. También son útiles en economía para modelar curvas de oferta y demanda o para optimizar ganancias."
+                        ],
+                        "image": {
+                            "url": "https://images.pexels.com/photos/256559/pexels-photo-256559.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+                            "altText": "Un puente con arcos parabólicos."
+                        },
+                        "codeBlock": "Ejemplos de Aplicaciones:\n  - Trayectoria de un balón de fútbol.\n  - Diseño de antenas parabólicas.\n  - Cálculo de áreas máximas en geometría.\n  - Modelado de crecimiento poblacional.",
+                        "reflectionQuestion": "¿Puedes pensar en alguna otra situación de la vida real donde las ecuaciones cuadráticas podrían ser útiles?",
+                        "iconListItems": [
+                            {
+                                "iconClass": "icon-idea",
+                                "heading": "Pensamiento Crítico",
+                                "description": "¿Cómo podrías simplificar un problema de la vida real para que pueda ser resuelto con una ecuación cuadrática?",
+                                "useCase": "Caso de uso: Un estudiante se enfrenta a un problema complejo de física. La IA puede guiarlo para identificar las variables clave y simplificar el problema a una forma resoluble."
+                            }
+                        ]
+                    }
+                ],
+                "activities": {
+                    "quiz": {
+                        "instruction": "Responde las siguientes preguntas sobre conceptos clave de ecuaciones cuadráticas.",
+                        "questions": [
+                            {
+                                "text": "¿Cuál es la forma general de una ecuación cuadrática?",
+                                "options": ["a) $ax + b = 0$", "b) $ax^2 + bx + c = 0$", "c) $a/x + b = 0$"],
+                                "correctValue": "b",
+                                "feedbackCorrect": "¡Correcto! La forma general de una ecuación cuadrática es $ax^2 + bx + c = 0$.",
+                                "feedbackIncorrect": "Incorrecto. Revisa la sección '¿Qué son las Ecuaciones Cuadráticas?' para más detalles."
+                            },
+                            {
+                                "text": "Si el discriminante de una ecuación cuadrática es negativo, ¿qué tipo de soluciones tiene?",
+                                "options": ["a) Dos soluciones reales distintas", "b) Una solución real repetida", "c) Dos soluciones complejas"],
+                                "correctValue": "c",
+                                "feedbackCorrect": "¡Correcto! Un discriminante negativo indica que la ecuación tiene dos soluciones complejas conjugadas.",
+                                "feedbackIncorrect": "Incorrecto. Revisa la sección 'Métodos de Resolución: Fórmula General'."
+                            }
+                        ]
+                    },
+                    "exercise": {
+                        "instruction": "Resuelve la siguiente ecuación cuadrática por <strong>factorización</strong> y escribe tus soluciones ($x_1, x_2$) separadas por coma. Considera la ecuación: $x^2 - x - 6 = 0$",
+                        "placeholder": "Ej: -2,3 o 3,-2",
+                        "keywords": ["-2,3", "3,-2"],
+                        "minLength": 3
+                    },
+                    "problemSolving": {
+                        "instruction": "Un proyectil se lanza verticalmente hacia arriba con una velocidad inicial de 20 m/s desde una altura de 5 m. La altura $h$ (en metros) del proyectil en función del tiempo $t$ (en segundos) está dada por la ecuación $h(t) = -5t^2 + 20t + 5$. ¿En qué momento el proyectil alcanzará una altura de 25 metros? (Redondea tu respuesta a un decimal si es necesario. Puede haber dos respuestas, escribe solo la primera en segundos).",
+                        "placeholder": "Ej: 2.0",
+                        "keywords": ["2", "2.0"],
+                        "minLength": 1
+                    },
+                    "matching": {
+                        "instruction": "Empareja cada término con su definición correcta en ecuaciones cuadráticas.",
+                        "pairs": [
+                            {"concept": "Discriminante", "options": [{"value": "a", "text": "Determina la naturaleza de las soluciones"}, {"value": "b", "text": "Coeficiente de $x$"}, {"value": "c", "text": "Término sin $x$"}], "correctValue": "a", "feedbackCorrect": "Correcto ✅", "feedbackIncorrect": "Incorrecto ❌"},
+                            {"concept": "Raíz de la ecuación", "options": [{"value": "a", "text": "Un valor de $x$ que satisface la ecuación"}, {"value": "b", "text": "El coeficiente principal"}, {"value": "c", "text": "El término independiente"}], "correctValue": "a", "feedbackCorrect": "Correcto ✅", "feedbackIncorrect": "Incorrecto ❌"},
+                            {"concept": "Término independiente", "options": [{"value": "a", "text": "El coeficiente de $x^2$"}, {"value": "b", "text": "El término sin variable"}, {"value": "c", "text": "El término con $x$"}], "correctValue": "b", "feedbackCorrect": "Correcto ✅", "feedbackIncorrect": "Incorrecto ❌"}
+                        ]
+                    },
+                    "trueFalse": {
+                        "instruction": "Indica si las siguientes afirmaciones sobre ecuaciones cuadráticas son Verdaderas o Falsas.",
+                        "questions": [
+                            {
+                                "text": "Toda ecuación cuadrática tiene al menos una solución real.",
+                                "correctValue": "false",
+                                "feedbackCorrect": "¡Correcto! Una ecuación cuadrática puede tener soluciones complejas (no reales).",
+                                "feedbackIncorrect": "Incorrecto. Algunas ecuaciones cuadráticas tienen soluciones complejas. Revisa la sección de la Fórmula General."
+                            },
+                            {
+                                "text": "El método de factorización siempre puede ser utilizado para resolver cualquier ecuación cuadrática.",
+                                "correctValue": "false",
+                                "feedbackCorrect": "¡Correcto! La factorización solo funciona para ecuaciones cuadráticas factorizables; la fórmula general es universal.",
+                                "feedbackIncorrect": "Incorrecto. La factorización no es universal; la fórmula general sí lo es. Revisa la sección de Factorización."
+                            }
+                        ]
+                    }
+                },
+                "summary": {
+                    "title": "Resumen del Módulo: Fundamentos de las Ecuaciones Cuadráticas",
+                    "contentPoints": [
+                        "Las ecuaciones cuadráticas son ecuaciones polinómicas de segundo grado con la forma $ax^2 + bx + c = 0$.",
+                        "Se pueden resolver por factorización (si es posible) o por la fórmula general, que es universal.",
+                        "El discriminante ($b^2 - 4ac$) indica la naturaleza de las soluciones.",
+                        "Es crucial evitar errores comunes como olvidar las dos soluciones o manejar mal los signos.",
+                        "Las ecuaciones cuadráticas tienen múltiples aplicaciones en física, ingeniería y economía."
+                    ],
+                    "closingRemark": "Dominar las ecuaciones cuadráticas es una habilidad fundamental que te abrirá puertas en el mundo de las matemáticas y sus aplicaciones."
+                },
+                "conclusion": {
+                    "title": "Conclusión y Próximos Pasos en Ecuaciones Cuadráticas",
+                    "message": "¡Felicidades por completar este módulo sobre ecuaciones cuadráticas! Has adquirido las herramientas necesarias para identificar, resolver y aplicar estas ecuaciones en diversos contextos. Te animamos a practicar regularmente y a explorar problemas más complejos.",
+                    "callToAction": "¡Continúa explorando el fascinante mundo de las matemáticas!"
+                },
+                "bibliography": [
+                    {"text": "Stewart, James. (2015). Cálculo de una variable: Trascendentes Tempranas. Cengage Learning.", "url": "https://www.cengage.com/c/calculus-early-transcendentals-8e-stewart/9781305266728/"},
+                    {"text": "Khan Academy: Ecuaciones Cuadráticas.", "url": "https://es.khanacademy.org/math/algebra/quadratics"},
+                    {"text": "Zill, Dennis G., & Dewar, Jacqueline M. (2012). Álgebra y Trigonometría con Geometría Analítica. McGraw-Hill Education.", "url": "https://www.mheducation.com/highered/product/algebra-trigonometry-analytic-geometry-zill-dewar/M9780073516317.html"}
+                ]
+            };
+
+            document.addEventListener('DOMContentLoaded', () => {
+                // Populate Module Info
+                document.getElementById('module-title').textContent = moocData.moduleInfo.title;
+                document.getElementById('module-description').textContent = moocData.moduleInfo.description;
+                document.getElementById('professor-name').textContent = `Profesor: ${moocData.moduleInfo.professorName}`;
+                document.getElementById('subject-name').textContent = `Materia: ${moocData.moduleInfo.subjectName}`;
+                document.getElementById('youtube-video-player').src = `https://www.youtube.com/embed/${moocData.moduleInfo.youtubeVideoId}?autoplay=0&controls=1&modestbranding=1&rel=0`;
+
+                // Populate Learning Objectives
+                const objectivesList = document.getElementById('learning-objectives-list');
+                moocData.learningObjectives.forEach(objective => {
+                    const li = document.createElement('li');
+                    li.textContent = objective;
+                    objectivesList.appendChild(li);
+                });
+
+                // Populate Sections
+                const sectionsContainer = document.getElementById('module-sections');
+                moocData.sections.forEach(section => {
+                    const sectionCard = document.createElement('div');
+                    sectionCard.className = 'section-card mb-6';
+                    sectionCard.setAttribute('data-section-id', section.id);
+
+                    const header = document.createElement('div');
+                    header.className = 'section-card-header flex justify-between items-center bg-gray-50 hover:bg-gray-100 rounded-t-lg';
+                    header.innerHTML = `
+                        <h3 class="text-xl font-semibold text-blue-700">${section.title}</h3>
+                        <span class="material-icons text-gray-600 transition-transform transform">expand_more</span>
+                    `;
+                    header.onclick = () => toggleSection(sectionCard);
+                    sectionCard.appendChild(header);
+
+                    const content = document.createElement('div');
+                    content.className = 'section-card-content';
+                    content.style.maxHeight = '0'; // Initial state
+
+                    section.contentParagraphs.forEach(pText => {
+                        const p = document.createElement('p');
+                        p.className = 'mb-4 text-gray-700';
+                        p.textContent = pText;
+                        content.appendChild(p);
+                    });
+
+                    if (section.image) {
+                        const imgDiv = document.createElement('div');
+                        imgDiv.className = 'mb-4 text-center';
+                        const img = document.createElement('img');
+                        img.src = section.image.url;
+                        img.alt = section.image.altText;
+                        img.className = 'max-w-full h-auto rounded-lg shadow-sm mx-auto';
+                        imgDiv.appendChild(img);
+                        content.appendChild(imgDiv);
+                    }
+
+                    if (section.codeBlock) {
+                        const pre = document.createElement('pre');
+                        pre.className = 'bg-gray-800 text-white p-4 rounded-lg mb-4 text-sm overflow-x-auto';
+                        const code = document.createElement('code');
+                        code.textContent = section.codeBlock;
+                        pre.appendChild(code);
+                        content.appendChild(pre);
+                    }
+
+                    if (section.reflectionQuestion) {
+                        const questionP = document.createElement('p');
+                        questionP.className = 'mb-4 italic text-gray-600 border-l-4 border-yellow-500 pl-3 py-1';
+                        questionP.innerHTML = `<strong>Pregunta de Reflexión:</strong> ${section.reflectionQuestion}`;
+                        content.appendChild(questionP);
+                    }
+
+                    if (section.iconListItems) {
+                        section.iconListItems.forEach(item => {
+                            const iconListItem = document.createElement('div');
+                            iconListItem.className = 'icon-list-item';
+                            iconListItem.innerHTML = `
+                                <div class="icon-container">
+                                    <span class="material-icons">${item.iconClass === 'icon-idea' ? 'lightbulb' : (item.iconClass === 'icon-quiz' ? 'quiz' : 'star')}</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-blue-700">${item.heading}</h4>
+                                    <p class="text-gray-600">${item.description}</p>
+                                    ${item.useCase ? `<p class="text-sm text-gray-500 mt-1"><em>${item.useCase}</em></p>` : ''}
+                                </div>
+                            `;
+                            content.appendChild(iconListItem);
+                        });
+                    }
+                    sectionCard.appendChild(content);
+                    sectionsContainer.appendChild(sectionCard);
+                });
+
+                // Populate Activities (display if present)
+                if (moocData.activities.quiz) {
+                    document.getElementById('quiz-activity').classList.remove('hidden');
+                    document.getElementById('quiz-instruction').innerHTML = moocData.activities.quiz.instruction;
+                    const quizQuestionsContainer = document.getElementById('quiz-questions-container');
+                    moocData.activities.quiz.questions.forEach((q, qIndex) => {
+                        const questionDiv = document.createElement('div');
+                        questionDiv.className = 'mb-4 p-4 border rounded-md bg-gray-50';
+                        questionDiv.innerHTML = `<p class="font-medium mb-2">${qIndex + 1}. ${q.text}</p>`;
+                        q.options.forEach((option, optIndex) => {
+                            const optionDiv = document.createElement('div');
+                            optionDiv.className = 'quiz-option p-2 border rounded cursor-pointer mb-1';
+                            optionDiv.textContent = option;
+                            optionDiv.setAttribute('data-question-index', qIndex);
+                            optionDiv.setAttribute('data-option-value', String.fromCharCode(97 + optIndex)); // 'a', 'b', 'c'
+                            optionDiv.onclick = (event) => selectQuizOption(event.target, qIndex);
+                            questionDiv.appendChild(optionDiv);
+                        });
+                        const feedbackDiv = document.createElement('div');
+                        feedbackDiv.id = `quiz-feedback-${qIndex}`;
+                        feedbackDiv.className = 'feedback hidden text-sm';
+                        questionDiv.appendChild(feedbackDiv);
+                        quizQuestionsContainer.appendChild(questionDiv);
+                    });
+                }
+
+                if (moocData.activities.exercise) {
+                    document.getElementById('exercise-activity').classList.remove('hidden');
+                    document.getElementById('exercise-instruction').innerHTML = moocData.activities.exercise.instruction;
+                    document.getElementById('exercise-input').placeholder = moocData.activities.exercise.placeholder;
+                }
+
+                if (moocData.activities.problemSolving) {
+                    document.getElementById('problem-solving-activity').classList.remove('hidden');
+                    document.getElementById('problem-solving-instruction').innerHTML = moocData.activities.problemSolving.instruction;
+                    document.getElementById('problem-solving-textarea').placeholder = moocData.activities.problemSolving.placeholder;
+                }
+
+                if (moocData.activities.matching) {
+                    document.getElementById('matching-activity').classList.remove('hidden');
+                    document.getElementById('matching-instruction').innerHTML = moocData.activities.matching.instruction;
+                    const matchingPairsContainer = document.getElementById('matching-pairs-container');
+                    moocData.activities.matching.pairs.forEach((pair, index) => {
+                        const pairDiv = document.createElement('div');
+                        pairDiv.className = 'matching-pair p-3 border rounded-md bg-gray-50 mb-2';
+                        pairDiv.innerHTML = `<span class="concept">${pair.concept}</span>`;
+
+                        const select = document.createElement('select');
+                        select.id = `matching-select-${index}`;
+                        select.className = 'ml-4 p-2 border rounded';
+                        select.innerHTML = '<option value="">Seleccionar...</option>'; // Default empty option
+                        pair.options.forEach(option => {
+                            const optionElem = document.createElement('option');
+                            optionElem.value = option.value;
+                            optionElem.textContent = option.text;
+                            select.appendChild(optionElem);
+                        });
+                        pairDiv.appendChild(select);
+
+                        const feedbackDiv = document.createElement('div');
+                        feedbackDiv.id = `matching-feedback-${index}`;
+                        feedbackDiv.className = 'ml-4 text-sm font-semibold';
+                        pairDiv.appendChild(feedbackDiv);
+
+                        matchingPairsContainer.appendChild(pairDiv);
+                    });
+                }
+
+                if (moocData.activities.trueFalse) {
+                    document.getElementById('true-false-activity').classList.remove('hidden');
+                    document.getElementById('true-false-instruction').innerHTML = moocData.activities.trueFalse.instruction;
+                    const tfQuestionsContainer = document.getElementById('true-false-questions-container');
+                    moocData.activities.trueFalse.questions.forEach((q, qIndex) => {
+                        const questionDiv = document.createElement('div');
+                        questionDiv.className = 'true-false-question p-3 border rounded-md bg-gray-50 mb-2';
+                        questionDiv.innerHTML = `<p class="font-medium mb-2">${qIndex + 1}. ${q.text}</p>`;
+
+                        const trueId = `tf-q${qIndex}-true`;
+                        const falseId = `tf-q${qIndex}-false`;
+
+                        questionDiv.innerHTML += `
+                            <label for="${trueId}" class="inline-flex items-center">
+                                <input type="radio" id="${trueId}" name="tf-q${qIndex}" value="true" class="form-radio text-blue-600">
+                                <span class="ml-2">Verdadero</span>
+                            </label>
+                            <label for="${falseId}" class="inline-flex items-center ml-4">
+                                <input type="radio" id="${falseId}" name="tf-q${qIndex}" value="false" class="form-radio text-blue-600">
+                                <span class="ml-2">Falso</span>
+                            </label>
+                        `;
+                        const feedbackDiv = document.createElement('div');
+                        feedbackDiv.id = `true-false-feedback-${qIndex}`;
+                        feedbackDiv.className = 'feedback hidden text-sm mt-2';
+                        questionDiv.appendChild(feedbackDiv);
+                        tfQuestionsContainer.appendChild(questionDiv);
+                    });
+                }
+
+
+                // Populate Summary
+                document.getElementById('summary-title').textContent = moocData.summary.title;
+                const summaryPointsList = document.getElementById('summary-content-points');
+                moocData.summary.contentPoints.forEach(point => {
+                    const li = document.createElement('li');
+                    li.textContent = point;
+                    summaryPointsList.appendChild(li);
+                });
+                document.getElementById('summary-closing-remark').textContent = moocData.summary.closingRemark;
+
+                // Populate Conclusion
+                document.getElementById('conclusion-title').textContent = moocData.conclusion.title;
+                document.getElementById('conclusion-message').textContent = moocData.conclusion.message;
+                document.getElementById('conclusion-call-to-action').textContent = moocData.conclusion.callToAction;
+
+                // Populate Bibliography
+                const bibliographyList = document.getElementById('bibliography-list');
+                moocData.bibliography.forEach(item => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = item.url;
+                    a.textContent = item.text;
+                    a.target = '_blank';
+                    a.className = 'text-blue-600 hover:underline';
+                    li.appendChild(a);
+                    bibliographyList.appendChild(li);
+                });
+
+                // Render MathJax after content is loaded
+                if (typeof MathJax !== 'undefined') {
+                    MathJax.typesetPromise();
+                }
+            });
+
+            function toggleSection(sectionCard) {
+                sectionCard.classList.toggle('expanded');
+                const content = sectionCard.querySelector('.section-card-content');
+                const icon = sectionCard.querySelector('.material-icons');
+
+                if (sectionCard.classList.contains('expanded')) {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    content.style.maxHeight = '0';
+                    icon.style.transform = 'rotate(0deg)';
+                }
+                // Re-render MathJax for the expanded content
+                if (typeof MathJax !== 'undefined') {
+                    MathJax.typesetPromise([content]);
+                }
+            }
+
+            // Quiz Functions
+            let selectedQuizOptions = {}; // Stores selected option for each question
+
+            function selectQuizOption(element, questionIndex) {
+                const options = document.querySelectorAll(`.quiz-option[data-question-index="${questionIndex}"]`);
+                options.forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                    opt.style.borderColor = ''; // Reset border
+                });
+                element.classList.add('selected');
+                selectedQuizOptions[questionIndex] = element.getAttribute('data-option-value');
+
+                // Hide feedback when a new option is selected
+                document.getElementById(`quiz-feedback-${questionIndex}`).classList.add('hidden');
+            }
+
+            function checkQuiz() {
+                let correctCount = 0;
+                moocData.activities.quiz.questions.forEach((q, qIndex) => {
+                    const selectedValue = selectedQuizOptions[qIndex];
+                    const feedbackDiv = document.getElementById(`quiz-feedback-${qIndex}`);
+                    const options = document.querySelectorAll(`.quiz-option[data-question-index="${qIndex}"]`);
+
+                    feedbackDiv.classList.remove('hidden', 'correct', 'incorrect');
+                    feedbackDiv.style.borderColor = ''; // Reset border
+
+                    if (selectedValue === q.correctValue) {
+                        correctCount++;
+                        feedbackDiv.textContent = q.feedbackCorrect;
+                        feedbackDiv.classList.add('correct');
+                        options.forEach(opt => {
+                            if (opt.getAttribute('data-option-value') === selectedValue) {
+                                opt.classList.add('correct');
+                            }
+                        });
+                    } else {
+                        feedbackDiv.textContent = q.feedbackIncorrect;
+                        feedbackDiv.classList.add('incorrect');
+                        options.forEach(opt => {
+                            if (opt.getAttribute('data-option-value') === selectedValue) {
+                                opt.classList.add('incorrect');
+                            }
+                            if (opt.getAttribute('data-option-value') === q.correctValue) {
+                                // Highlight correct answer if incorrect option was chosen
+                                opt.classList.add('correct');
+                                opt.style.borderColor = '#34a853'; /* Google Green */
+                            }
+                        });
+                    }
+                });
+
+                const quizSummary = document.getElementById('quiz-summary');
+                quizSummary.textContent = `Has respondido ${correctCount} de ${moocData.activities.quiz.questions.length} preguntas correctamente.`;
+                quizSummary.className = `mt-4 font-semibold text-lg ${correctCount === moocData.activities.quiz.questions.length ? 'text-green-600' : 'text-red-600'}`;
+            }
+
+            // Exercise Function
+            function checkExercise() {
+                const input = document.getElementById('exercise-input').value.trim();
+                const feedbackDiv = document.getElementById('exercise-feedback');
+                feedbackDiv.className = 'mt-2'; // Reset classes
+
+                const correctAnswers = moocData.activities.exercise.keywords.map(kw => kw.toLowerCase());
+                const normalizedInput = input.replace(/\s/g, '').toLowerCase(); // Remove spaces and lowercase for flexible check
+
+                let isCorrect = false;
+                for (const answer of correctAnswers) {
+                    if (normalizedInput === answer.replace(/\s/g, '')) {
+                        isCorrect = true;
+                        break;
+                    }
+                }
+
+                if (isCorrect) {
+                    feedbackDiv.className = 'feedback correct';
+                    feedbackDiv.textContent = '¡Correcto! Las soluciones son -2 y 3.';
+                } else {
+                    feedbackDiv.className = 'feedback incorrect';
+                    feedbackDiv.textContent = `Incorrecto. Recuerda que las soluciones son -2 y 3 (o viceversa). Inténtalo de nuevo.`;
+                }
+            }
+
+            // Problem Solving Function
+            function checkProblemSolving() {
+                const textarea = document.getElementById('problem-solving-textarea').value.trim();
+                const feedbackDiv = document.getElementById('problem-solving-feedback');
+                feedbackDiv.className = 'mt-2'; // Reset classes
+
+                const keywords = moocData.activities.problemSolving.keywords;
+                const minLength = moocData.activities.problemSolving.minLength;
+
+                let containsKeywords = true;
+                for (const keyword of keywords) {
+                    if (!textarea.toLowerCase().includes(keyword.toLowerCase())) {
+                        containsKeywords = false;
+                        break;
+                    }
+                }
+
+                // For the specific problem, calculate the time.
+                // h(t) = -5t^2 + 20t + 5
+                // We want h(t) = 25
+                // 25 = -5t^2 + 20t + 5
+                // 0 = -5t^2 + 20t - 20
+                // Divide by -5: 0 = t^2 - 4t + 4
+                // This is (t-2)^2 = 0, so t = 2 (or 2.0)
+
+                const expectedTime = 2.0; // The calculated answer for the problem
+                const userAttempt = parseFloat(textarea); // Try to parse as number for problem solving
+
+                if (isNaN(userAttempt) || Math.abs(userAttempt - expectedTime) > 0.1) { // Allow slight float deviation
+                     feedbackDiv.className = 'feedback incorrect';
+                     feedbackDiv.textContent = `Incorrecto. La respuesta esperada para el tiempo es 2.0 segundos. Revisa tus cálculos.`;
+                } else {
+                    feedbackDiv.className = 'feedback correct';
+                    feedbackDiv.textContent = '¡Correcto! El proyectil alcanzará los 25 metros a los 2.0 segundos.';
+                }
+            }
+
+
+            // Matching Function
+            function checkMatching() {
+                let allCorrect = true;
+                moocData.activities.matching.pairs.forEach((pair, index) => {
+                    const select = document.getElementById(`matching-select-${index}`);
+                    const feedbackDiv = document.getElementById(`matching-feedback-${index}`);
+                    feedbackDiv.className = 'ml-4 text-sm font-semibold'; // Reset classes
+
+                    if (select.value === pair.correctValue) {
+                        feedbackDiv.textContent = pair.feedbackCorrect;
+                        feedbackDiv.classList.add('text-green-600');
+                    } else {
+                        feedbackDiv.textContent = pair.feedbackIncorrect;
+                        feedbackDiv.classList.add('text-red-600');
+                        allCorrect = false;
+                    }
+                });
+                const overallFeedback = document.getElementById('matching-feedback');
+                if (overallFeedback) { // Clear previous overall feedback if it exists
+                    overallFeedback.textContent = '';
+                }
+            }
+
+            // True/False Function
+            function checkTrueFalse() {
+                let correctCount = 0;
+                moocData.activities.trueFalse.questions.forEach((q, qIndex) => {
+                    const selectedOption = document.querySelector(`input[name="tf-q${qIndex}"]:checked`);
+                    const feedbackDiv = document.getElementById(`true-false-feedback-${qIndex}`);
+                    feedbackDiv.classList.remove('hidden', 'correct', 'incorrect');
+
+                    if (selectedOption && selectedOption.value === q.correctValue) {
+                        correctCount++;
+                        feedbackDiv.textContent = q.feedbackCorrect;
+                        feedbackDiv.classList.add('correct');
+                    } else {
+                        feedbackDiv.textContent = q.feedbackIncorrect;
+                        feedbackDiv.classList.add('incorrect');
+                    }
+                });
+                const tfFeedback = document.getElementById('true-false-feedback');
+                tfFeedback.className = `mt-4 font-semibold text-lg ${correctCount === moocData.activities.trueFalse.questions.length ? 'text-green-600' : 'text-red-600'}`;
+                tfFeedback.textContent = `Has respondido ${correctCount} de ${moocData.activities.trueFalse.questions.length} preguntas correctamente.`;
+            }
+        </script>
+    </immersive>
+</body>
+</html>
