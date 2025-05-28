@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1: Creatividad Desatada con Google Gemini</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos base para la fuente Inter y el line-height */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6; /* Mejora la legibilidad del texto */
+            -webkit-font-smoothing: antialiased; /* Suaviza el renderizado de fuentes en WebKit */
+            -moz-osx-font-smoothing: grayscale; /* Suaviza el renderizado de fuentes en Firefox (macOS) */
+        }
+
+        /* Estilos para la portada */
+        #coverPage {
+            background-size: cover;
+            background-position: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Estilos personalizados para los iconos de lista usando pseudo-elementos y emojis */
+        /* Estos estilos no se pueden replicar fácilmente con Tailwind y se mantienen aquí */
+        .icon-list li {
+            list-style-type: none; /* Eliminar el estilo de lista predeterminado */
+            padding-left: 30px; /* Espacio para el icono */
+            position: relative; /* Posicionamiento para el pseudo-elemento */
+            margin-bottom: 10px; /* Espaciado entre elementos de la lista */
+            font-size: 1.05em; /* Tamaño de fuente ligeramente más grande */
+        }
+        .icon-list li::before {
+            content: ""; /* Contenido del pseudo-elemento (emoji) */
+            position: absolute; /* Posicionamiento absoluto dentro del li */
+            left: 0; /* Alinear a la izquierda */
+            top: 2px; /* Ajuste vertical */
+            font-size: 1.3em; /* Tamaño del icono */
+            color: #007bff; /* Color del icono (azul de Tailwind) */
+        }
+        /* Emojis específicos para cada tipo de icono */
+        .icon-list li.icon-idea::before { content: "💡"; }
+        .icon-list li.icon-quiz::before { content: "❓"; }
+        .icon-list li.icon-story::before { content: "📖"; }
+        .icon-list li.icon-email::before { content: "📧"; }
+        .icon-list li.icon-adapt::before { content: "🔄"; }
+        .icon-list li.icon-materials::before { content: "📚"; }
+        .icon-list li.icon-error::before { content: "❌"; }
+        .icon-list li.icon-tip::before { content: "✅"; }
+
+
+        /* Keyframes para la animación de aparición gradual */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Clase para aplicar la animación de aparición gradual */
+        .animate-fadeIn {
+            animation: fadeIn 0.7s ease-in-out;
+        }
+        /* Animación para retraso en elementos de la portada */
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-400 { animation-delay: 0.4s; }
+
+
+        /* Estilo para la animación de revelación al hacer scroll */
+        .reveal-on-scroll {
+            opacity: 0; /* Inicialmente invisible */
+            transform: translateY(20px); /* Ligeramente desplazado hacia abajo */
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Transición suave */
+        }
+        .reveal-on-scroll.visible {
+            opacity: 1; /* Visible cuando la clase 'visible' se añade */
+            transform: translateY(0); /* Vuelve a su posición original */
+        }
+
+        /* Estilos para el esquema de funcionamiento (solo texto) */
+        .scheme-box {
+            background-color: #e7f3ff;
+            border: 1px solid #cce4ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace; /* Fuente monoespaciada para el esquema */
+            color: #004085;
+            font-size: 0.95em;
+            overflow-x: auto; /* Para asegurar que el esquema sea visible en móviles */
+        }
+        .scheme-box pre {
+            margin: 0;
+            white-space: pre-wrap; /* Permite que el texto se ajuste */
+            word-wrap: break-word; /* Rompe palabras largas */
+        }
+        .scheme-box .arrow {
+            font-size: 1.5em;
+            margin: 5px 0;
+            display: block;
+            color: #007bff;
+        }
+
+        /* Estilos para el caso de uso integrado */
+        .use-case-card {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .use-case-card h4 {
+            color: #0056b3;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #b3d7ff;
+            padding-bottom: 8px;
+        }
+        .use-case-card .prompt-example {
+            background-color: #e2e8f0; /* bg-blue-100 */
+            border-left: 4px solid #3b82f6; /* border-blue-500 */
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #1e40af; /* text-blue-800 */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .use-case-card .response-hint {
+            font-style: italic;
+            color: #4a5568; /* text-gray-700 */
+            font-size: 0.9em;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* Estilos para la miniatura de video */
+        .video-thumbnail-link {
+            display: inline-block; /* Para que la imagen se centre y no ocupe todo el ancho */
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out;
+            overflow: hidden; /* Asegura que la sombra y el borde redondeado se apliquen correctamente */
+        }
+        .video-thumbnail-link:hover {
+            transform: scale(1.03); /* Efecto de zoom al pasar el ratón */
+        }
+        .video-thumbnail-link img {
+            max-width: 100%;
+            height: auto;
+            display: block; /* Elimina espacio extra debajo de la imagen */
+        }
+
+        /* Estilos para la barra de progreso */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            height: 8px;
+            margin-bottom: 20px;
+            overflow: hidden; /* Ensures the inner bar stays within bounds */
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #3b82f6; /* Tailwind blue-500 */
+            border-radius: 5px;
+            transition: width 0.3s ease-out;
+        }
+
+        /* Estilos para el menú de navegación interno */
+        .internal-nav-menu {
+            background-color: #f0f9ff; /* blue-50 */
+            border: 1px solid #bfdbfe; /* blue-200 */
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .internal-nav-menu ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .internal-nav-menu li a {
+            display: block;
+            padding: 8px 15px;
+            background-color: #dbeafe; /* blue-100 */
+            color: #1e40af; /* blue-800 */
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            font-weight: 600;
+        }
+        .internal-nav-menu li a:hover {
+            background-color: #bfdbfe; /* blue-200 */
+            transform: translateY(-1px);
+        }
+
+        /* Estilos para el botón "Marcar como leído" */
+        .mark-as-read-btn {
+            display: block; /* Ocupa todo el ancho disponible */
+            width: fit-content; /* Se ajusta al contenido */
+            margin: 20px auto 0 auto; /* Centra el botón y añade margen superior */
+            padding: 10px 20px;
+            background-color: #60a5fa; /* blue-400 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .mark-as-read-btn:hover {
+            background-color: #3b82f6; /* blue-500 */
+            transform: translateY(-1px);
+        }
+        .mark-as-read-btn.completed {
+            background-color: #34d399; /* green-400 */
+            cursor: default;
+            box-shadow: none;
+        }
+        .mark-as-read-btn.completed:hover {
+            background-color: #10b981; /* green-500 */
+            transform: none;
+        }
+
+        /* Estilos para la actividad de emparejamiento */
+        .matching-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .matching-pair {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background-color: #e2e8f0;
+            border-radius: 8px;
+            border: 1px solid #cbd5e0;
+        }
+        .matching-pair .concept {
+            font-weight: 600;
+            color: #2d3748;
+            text-align: center;
+        }
+        .matching-pair select {
+            width: 100%;
+            max-width: 250px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #a0aec0;
+            background-color: white;
+            font-size: 1em;
+            cursor: pointer;
+            outline: none;
+        }
+        .matching-pair select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        .matching-pair .feedback-match {
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        .feedback-match.correct { color: #10b981; } /* green-500 */
+        .feedback-match.incorrect { color: #ef4444; } /* red-500 */
+    </style>
+</head>
+<body class="font-inter leading-relaxed bg-gray-100 text-gray-800 antialiased">
+    <div id="coverPage" class="fixed inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex flex-col items-center justify-center p-8 z-[10001] text-center">
+        <h1 class="text-5xl font-extrabold mb-4 animate-fadeIn md:text-4xl sm:text-3xl">Creatividad Desatada con Google Gemini</h1>
+        <p class="text-xl mb-4 max-w-2xl animate-fadeIn animate-delay-200 md:text-lg sm:text-base">
+            Descubre cómo la inteligencia artificial de Google Gemini puede transformar tu planificación docente y potenciar la innovación en el aula.
+        </p>
+        <p class="text-lg font-semibold mb-2 animate-fadeIn animate-delay-300 md:text-base sm:text-sm">
+            Profesor: Luis Alfredo Andia Valverde
+        </p>
+        <p class="text-lg font-semibold mb-8 animate-fadeIn animate-delay-300 md:text-base sm:text-sm">
+            Materia: Planificación con IA
+        </p>
+        <button id="startModuleBtn" class="px-8 py-4 bg-white text-blue-700 font-bold rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 animate-fadeIn animate-delay-400 text-lg md:px-6 md:py-3 md:text-base">
+            Comenzar Módulo
+        </button>
+    </div>
+
+    <div class="module-container hidden w-[90%] max-w-3xl mx-auto my-8 p-8 bg-white shadow-xl rounded-xl md:w-[95%] md:p-6 sm:p-4 sm:my-4">
+        <header class="mb-8">
+            <h1 class="text-blue-800 text-center mb-5 text-3xl font-bold md:text-2xl sm:text-xl">Módulo 1: Creatividad Desatada con Google Gemini</h1>
+            <div class="module-objectives bg-blue-50 p-5 rounded-lg mb-8 border-l-4 border-blue-600 shadow-sm">
+                <h2 class="mt-0 text-blue-800 text-xl font-semibold mb-3">Objetivos de Aprendizaje del Módulo:</h2>
+                <ul class="list-disc ml-5 pl-1 text-base">
+                    <li>Comprender qué es <strong class="text-blue-900">Google Gemini</strong> y cómo funciona a un nivel básico.</li>
+                    <li>Formular <strong class="text-blue-900">prompts iniciales</strong> para solicitar a Gemini ideas para clases, actividades y recursos.</li>
+                    <li>Identificar al menos 3 <strong class="text-blue-900">aplicaciones prácticas</strong> de Gemini en la planificación diaria de un docente.</li>
+                    <li>Aplicar consejos básicos para crear <strong class="text-blue-900">prompts más efectivos</strong>.</li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="moduleProgressBar"></div>
+        </div>
+
+        <nav class="internal-nav-menu">
+            <h3 class="text-blue-700 text-lg font-semibold mb-3 text-center">Navegación del Módulo:</h3>
+            <ul>
+                <li><a href="#section1-1">¿Qué es Gemini?</a></li>
+                <li><a href="#section1-2">Tu Primer Chat</a></li>
+                <li><a href="#section1-3">Ideas Prácticas</a></li>
+                <li><a href="#section1-4">Prompts Efectivos</a></li>
+                <li><a href="#activityQuiz">Quiz</a></li>
+                <li><a href="#activityExercise">Genera Ideas</a></li>
+                <li><a href="#activityProblemSolving">Resolución de Problemas</a></li>
+                <li><a href="#activityMatching">Emparejamiento</a></li>
+                <li><a href="#activityTrueFalse">Verdadero o Falso</a></li>
+                <li><a href="#section-summary">Resumen</a></li>
+                <li><a href="#section-conclusion">Conclusión</a></li>
+                <li><a href="#section-bibliography">Bibliografía</a></li>
+            </ul>
+        </nav>
+
+        <section class="module-section mb-9 p-6 border-b border-gray-200 bg-gray-50 rounded-lg shadow-sm last:border-b-0 last:mb-0" id="section1-1">
+            <div class="section-progress-indicator text-sm text-gray-600 text-right mb-1 italic">Sección 1 de 4</div>
+            <h2 class="text-blue-600 mt-0 mb-4 text-2xl font-semibold border-b-2 border-blue-600 pb-2 sm:text-xl">¿Qué es Google Gemini?</h2>
+            <p class="text-base mb-3">Google Gemini es un <strong class="text-blue-900 font-bold">modelo de lenguaje grande (LLM)</strong> desarrollado por Google AI. Piensa en él como un asistente virtual muy avanzado con el que puedes conversar de forma natural. Su principal habilidad es <strong class="text-blue-900 font-bold">entender y generar texto</strong> de manera creativa, coherente y contextualizada, lo que lo convierte en una <strong class="text-blue-900">herramienta fantástica</strong> para ayudarte en diversas tareas de planificación educativa.</p>
+            <p class="text-base mb-3">A diferencia de un buscador tradicional que solo encuentra información existente, Gemini puede <strong class="text-blue-900 font-bold">crear contenido nuevo</strong>: desde borradores de correos electrónicos hasta ideas para proyectos, pasando por resúmenes de temas complejos o incluso poesía. Esta capacidad de <strong class="text-blue-900">generación de texto</strong> lo hace especialmente útil para superar el "bloqueo de la página en blanco" y para explorar diferentes enfoques pedagógicos.</p>
+            
+            <div class="internet-image-container flex justify-center items-center my-6 p-3 bg-gray-50 border border-gray-300 rounded-lg text-center shadow-sm">
+                <img src="https://images.pexels.com/photos/733856/pexels-photo-733856.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" 
+                     alt="Ilustración abstracta de una red neuronal o cerebro, simbolizando la inteligencia artificial." 
+                     loading="lazy"
+                     class="max-w-full h-auto rounded-md shadow-md"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Imagen+no+disponible';">
+            </div>
+            <p class="image-caption text-sm text-gray-600 mt-2 italic">La IA como Gemini puede ser una fuente de inspiración y eficiencia para los docentes.</p>
+
+            <h3 class="text-blue-700 mt-8 text-xl font-semibold border-b border-blue-300 pb-2 mb-4 sm:text-lg">¿Cómo funciona un LLM como Gemini? (Esquema Básico)</h3>
+            <p class="text-base mb-3">Aunque la tecnología detrás de Gemini es compleja, podemos simplificar su funcionamiento para entender su <strong class="text-blue-900">potencial</strong>:</p>
+            <div class="scheme-box">
+                <pre>
+[Datos de Entrenamiento Masivos]
+(Textos, código, imágenes, audio, video)
+        ↓
+[Modelo de Lenguaje Grande (LLM)]
+(Identifica patrones, relaciones, contexto)
+        ↓
+[Tu Prompt (Instrucción/Pregunta)]
+        ↓
+[Gemini Procesa y Genera]
+(Predice la siguiente palabra/secuencia más probable)
+        ↓
+[Respuesta Creativa y Coherente]
+                </pre>
+            </div>
+            <p class="text-base mb-3">Esta capacidad de <strong class="text-blue-900 font-bold">"predecir la siguiente palabra"</strong> de forma inteligente es lo que le permite generar desde un resumen hasta un plan de lección detallado, basándose en los vastos conocimientos con los que fue entrenado.</p>
+
+            <p class="text-base mb-3">Como docente, esto se traduce en un <strong class="text-blue-900">ahorro de tiempo significativo</strong> y una fuente constante de inspiración. Puedes usarlo para:</p>
+            <ul class="list-disc ml-5 pl-1 text-base">
+                <li class="mb-2">Intercambiar ideas y desarrollar planes.</li>
+                <li class="mb-2">Obtener resúmenes rápidos de temas complejos.</li>
+                <li class="mb-2">Crear primeros borradores de esquemas, actividades, y mucho más.</li>
+            </ul>
+
+            <div class="mt-5 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-600 shadow-sm">
+                <p class="font-semibold text-blue-800 mb-2">🤔 Reflexión:</p>
+                <p class="text-base">Considerando la capacidad de Gemini para "crear contenido nuevo", ¿cómo crees que esto podría ayudarte a superar un <strong class="text-blue-900">desafío específico</strong> en tu planificación docente que actualmente te consume mucho tiempo?</p>
+            </div>
+            <button class="mark-as-read-btn" data-section-id="section1-1" onclick="markSectionAsRead(this)">Marcar como leído</button>
+        </section>
+
+        <section class="module-section mb-9 p-6 border-b border-gray-200 bg-gray-50 rounded-lg shadow-sm last:border-b-0 last:mb-0" id="section1-2">
+            <div class="section-progress-indicator text-sm text-gray-600 text-right mb-1 italic">Sección 2 de 4</div>
+            <h2 class="text-blue-600 mt-0 mb-4 text-2xl font-semibold border-b-2 border-blue-600 pb-2 sm:text-xl">Tu Primer Chat con Gemini para la Planificación</h2>
+            <p class="text-base mb-3">Empezar a usar Gemini (o una herramienta similar que tu institución educativa provea) es generalmente muy sencillo. La interfaz suele ser un chat donde escribes tus instrucciones o preguntas, conocidas como <strong class="text-blue-900 font-bold">"prompts"</strong>. ¡No hay una forma incorrecta de empezar!</p>
+            <p class="text-base mb-3">Aquí tienes algunos ejemplos de prompts iniciales para "romper el hielo" y ver qué sucede:</p>
+            <ul class="list-disc ml-5 pl-1 text-base">
+                <li class="mb-2">"Hola Gemini, ¿puedes explicarme de forma sencilla qué tipo de cosas puedes hacer para ayudar a un profesor de secundaria?"</li>
+                <li class="mb-2">"Necesito ideas para una actividad rompehielos para mi clase de historia de 15 alumnos. ¿Puedes sugerirme 3 opciones?"</li>
+                <li class="mb-2">"Dame 5 ideas para introducir el tema de la fotosíntesis a alumnos de 13 años, que sean participativas."</li>
+            </ul>
+            <p class="text-base mb-3"><strong class="text-blue-900 font-bold">Experimenta sin miedo:</strong> Prueba diferentes formas de preguntar. Si la primera respuesta no es exactamente lo que buscas, ¡no te desanimes! Puedes reformular tu prompt, añadir más detalles o pedirle a Gemini que refine su respuesta anterior.</p>
+            
+            <div class="internet-image-container flex justify-center items-center my-6 p-3 bg-gray-50 border border-gray-300 rounded-lg text-center shadow-sm">
+                 <img src="https://images.pexels.com/photos/5077060/pexels-photo-5077060.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" 
+                     alt="Maqueta de una interfaz de chat en un teléfono móvil o computadora, representando la interacción con una IA." 
+                     loading="lazy"
+                     class="max-w-full h-auto rounded-md shadow-md"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Imagen+no+disponible';">
+            </div>
+            <p class="image-caption text-sm text-gray-600 mt-2 italic">La interacción con Gemini se realiza a través de una interfaz de chat intuitiva.</p>
+            
+            <h3 class="text-blue-700 mt-8 text-xl font-semibold border-b border-blue-300 pb-2 mb-4 sm:text-lg">La Fórmula del Prompt Básico</h3>
+            <p class="text-base mb-3">Para empezar a estructurar tus prompts, puedes pensar en una <strong class="text-blue-900">fórmula sencilla</strong> que te ayudará a ser más específico:</p>
+            <div class="scheme-box">
+                <pre>
+[ROL / PERSONA]
+(¿Qué rol debe asumir la IA? Ej: "Como profesor de historia...", "Actúa como un experto en...")
+        ↓
+[TAREA PRINCIPAL]
+(¿Qué quieres que haga? Ej: "Genera ideas para...", "Resume este texto...", "Crea un plan de...")
+        ↓
+[CONTEXTO / DETALLES]
+(Información clave: nivel de los alumnos, duración, tema específico, materiales disponibles)
+        ↓
+
+[FORMATO DESEADO]
+(¿Cómo quieres la respuesta? Ej: "En formato de lista", "Como un diálogo", "En una tabla con X columnas")
+                </pre>
+            </div>
+            <p class="text-base mb-3">Aplicar esta fórmula te ayudará a obtener <strong class="text-blue-900">respuestas más precisas y útiles</strong> desde el principio.</p>
+
+            <h3 class="text-blue-700 mt-8 text-xl font-semibold border-b border-blue-300 pb-2 mb-4 sm:text-lg">Ejemplos de Prompts Estructurados:</h3>
+            <ul class="list-disc ml-5 pl-1 text-base">
+                <li class="mb-2"><strong>Para lluvia de ideas:</strong> "Como profesor de primaria, necesito 5 ideas de actividades lúdicas para introducir el concepto de ecosistema a niños de 8 años. Preséntalas como una lista numerada con una breve descripción de cada una."</li>
+                <li class="mb-2"><strong>Para resúmenes:</strong> "Actúa como un tutor de bachillerato. Resume el siguiente texto sobre la Revolución Industrial en 200 palabras, enfocándote en sus causas y consecuencias principales, para alumnos que están viendo el tema por primera vez."</li>
+                <li class="mb-2"><strong>Para creación de contenido:</strong> "Crea un breve diálogo entre dos personajes, un científico y un artista, discutiendo la importancia de la creatividad en sus respectivos campos. El diálogo debe ser inspirador y tener unas 150 palabras."</li>
+            </ul>
+
+            <p class="text-base mb-3"><strong class="text-blue-900 font-bold">Consideraciones importantes:</strong>
+                <ul class="list-disc ml-5 pl-1 text-base">
+                    <li class="mb-2"><strong class="text-blue-900 font-bold">Verifica la información:</strong> Aunque Gemini es muy avanzado, no es infalible. Siempre es buena idea verificar datos cruciales.</li>
+                    <li class="mb-2"><strong class="text-blue-900 font-bold">Es una herramienta:</strong> No reemplaza tu juicio profesional. Úsalo como un asistente.</li>
+                    <li class="mb-2"><strong class="text-blue-900 font-bold">Privacidad:</strong> Ten cuidado con la información personal o sensible que compartes.</li>
+                </ul>
+            </p>
+            
+            <h3 class="text-blue-700 mt-8 text-xl font-semibold border-b border-blue-300 pb-2 mb-5 sm:text-lg">Gemini en Acción (Video Tutorial)</h3>
+            <div class="video-link-container text-center my-6 p-5 bg-gray-50 border border-gray-300 rounded-lg shadow-sm">
+                <p class="mb-4 text-base">Para una demostración práctica de cómo Gemini puede ayudar a los educadores, mira este video:</p>
+                <a href="#" onclick="openPopup('https://www.youtube.com/watch?v=R9o6y5RzK5M'); return false;" class="video-thumbnail-link">
+                    <img src="https://img.youtube.com/vi/R9o6y5RzK5M/hqdefault.jpg" 
+                         alt="Miniatura del video tutorial: 'Usando Gemini para Google Workspace como educador'." 
+                         class="max-w-full h-auto rounded-md"
+                         onerror="this.onerror=null;this.src='https://placehold.co/480x360/cccccc/333333?text=Video+no+disponible';">
+                </a>
+                <p class="text-sm mt-4 text-gray-600"><em>Haz clic en la imagen para ver el video tutorial en YouTube. <br>(Se recomienda activar los subtítulos para una mejor comprensión).</em></p>
+            </div>
+
+            <div class="mt-5 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-600 shadow-sm">
+                <p class="font-semibold text-blue-800 mb-2">🤔 Reflexión:</p>
+                <p class="text-base">¿Cómo podrías aplicar la <strong class="text-blue-900">"Fórmula del Prompt Básico"</strong> para mejorar la claridad de tus solicitudes a Gemini en tu próxima tarea de planificación?</p>
+            </div>
+            <button class="mark-as-read-btn" data-section-id="section1-2" onclick="markSectionAsRead(this)">Marcar como leído</button>
+        </section>
+
+        <section class="module-section mb-9 p-6 border-b border-gray-200 bg-gray-50 rounded-lg shadow-sm last:border-b-0 last:mb-0" id="section1-3">
+            <div class="section-progress-indicator text-sm text-gray-600 text-right mb-1 italic">Sección 3 de 4</div>
+            <h2 class="text-blue-600 mt-0 mb-4 text-2xl font-semibold border-b-2 border-blue-600 pb-2 sm:text-xl">Ideas Prácticas con Gemini en el Aula</h2>
+            <p class="text-base mb-3">La <strong class="text-blue-900">versatilidad de Gemini</strong> lo convierte en un valioso recurso para múltiples tareas de planificación. Aquí te detallamos algunas aplicaciones concretas:</p>
+            <ul class="icon-list">
+                <li class="icon-idea text-base"><strong>Lluvia de ideas para proyectos y actividades:</strong>
+                    <p class="text-base mt-1 mb-3">¿Te faltan ideas para un tema específico? Pídele a Gemini que te sugiera enfoques. <em>Ejemplo: "Gemini, necesito 5 ideas de proyectos innovadores sobre el ciclo del agua para alumnos de primaria, que involucren experimentación."</em></p>
+                    <p class="text-sm italic text-gray-600">Caso de uso: Un docente necesita ideas para un proyecto de ciencias que sea práctico y divertido para niños de 8 años. Con Gemini, puede obtener una lista de opciones en minutos, <strong class="text-blue-900">ahorrando tiempo</strong> de investigación.</p>
+                </li>
+                <li class="icon-quiz text-base"><strong>Generación de preguntas para debates o evaluaciones:</strong>
+                    <p class="text-base mt-1 mb-3">Puedes pedirle que cree preguntas que fomenten el <strong class="text-blue-900">pensamiento crítico</strong> o que sirvan para un quiz rápido. <em>Ejemplo: "Genera 3 preguntas de debate sobre las implicaciones éticas de la inteligencia artificial para estudiantes de bachillerato."</em></p>
+                    <p class="text-sm italic text-gray-600">Caso de uso: Un profesor de filosofía busca preguntas abiertas para estimular una discusión profunda en clase sobre un tema contemporáneo. Gemini puede proporcionar prompts que inviten a la reflexión y al análisis.</p>
+                </li>
+                <li class="icon-story text-base"><strong>Creación de cuentos, escenarios o ejemplos:</strong>
+                    <p class="text-base mt-1 mb-3">Haz que los conceptos abstractos sean más tangibles. <em>Ejemplo: "Escribe un breve diálogo entre dos personajes históricos discutiendo un evento importante de su época."</em></p>
+                    <p class="text-sm italic text-gray-600">Caso de uso: Para explicar la ley de la oferta y la demanda, un docente pide a Gemini que cree un escenario con dos personajes (un vendedor y un comprador) que ilustren el concepto de forma sencilla y memorable.</p>
+                </li>
+                <li class="icon-email text-base"><strong>Borradores de comunicaciones (correos, notas):</strong>
+                    <p class="text-base mt-1 mb-3">Ahorra tiempo redactando comunicaciones. <em>Ejemplo: "Ayúdame a redactar un correo amable para los padres recordando la reunión de la próxima semana, mencionando los temas a tratar: [tema1], [tema2]."</em></p>
+                    <p class="text-sm italic text-gray-600">Caso de uso: Un docente necesita enviar un correo a los padres informando sobre un cambio en el horario de clases. Gemini puede generar un borrador profesional y claro en segundos, que luego el docente puede personalizar.</p>
+                </li>
+                <li class="icon-adapt text-base"><strong>Adaptación de materiales a diferentes niveles o necesidades:</strong>
+                    <p class="text-base mt-1 mb-3">Si tienes un texto complejo, pídele a Gemini que lo simplifique o lo adapte. <em>Ejemplo: "Simplifica este párrafo sobre la estructura del ADN para que lo entienda un niño de 10 años, usando analogías."</em></p>
+                    <p class="text-sm italic text-gray-600">Caso de uso: Para alumnos con diferentes ritmos de aprendizaje o necesidades especiales, un profesor puede usar Gemini para adaptar un texto científico complejo a un lenguaje más accesible, sin perder la esencia del contenido.</p>
+                </li>
+                <li class="icon-materials text-base"><strong>Creación de Materiales Didácticos Complementarios:</strong>
+                    <p class="text-base mt-1 mb-3">Genera flashcards, glosarios, resúmenes o ejercicios rápidos. <em>Ejemplo: "Crea 10 preguntas de verdadero/falso sobre la Segunda Guerra Mundial, enfocándote en eventos clave y personajes principales, para alumnos de secundaria."</em></p>
+                    <p class="text-sm italic text-gray-600">Caso de uso: Un docente necesita rápidamente un set de flashcards para repasar vocabulario clave de una unidad de inglés. Gemini puede generar las palabras y sus definiciones, listas para imprimir o usar digitalmente.</p>
+                </li>
+            </ul>
+
+            <h3 class="text-blue-700 mt-8 text-xl font-semibold border-b border-blue-300 pb-2 mb-4 sm:text-lg">Caso de Uso Integrado: Planificación de una Lección</h3>
+            <p class="text-base mb-3">Veamos cómo un docente podría usar Gemini en una <strong class="text-blue-900">secuencia de prompts</strong> para planificar una parte de una lección:</p>
+            <div class="use-case-card">
+                <h4>Paso 1: Lluvia de Ideas para el Tema</h4>
+                <div class="prompt-example">
+                    "Soy un profesor de secundaria. Necesito ideas creativas para introducir el tema de 'Cambio Climático' a alumnos de 14-15 años. Dame 3 enfoques innovadores para una clase de 60 minutos."
+                </div>
+                <p class="response-hint"><em>Respuesta esperada: Gemini sugiere 3 ideas (ej: debate de roles, simulación de impacto, proyecto de investigación).</em></p>
+
+                <h4>Paso 2: Desarrollar una Idea Específica</h4>
+                <div class="prompt-example">
+                    "Me gusta la idea del 'debate de roles'. ¿Podrías crear un esquema de actividad detallado para este debate, incluyendo roles para los alumnos (científico, político, ciudadano, activista), puntos clave para cada rol y una estructura de tiempo para 60 minutos?"
+                </div>
+                <p class="response-hint"><em>Respuesta esperada: Gemini proporciona un esquema con roles, argumentos y una línea de tiempo.</em></p>
+
+                <h4>Paso 3: Crear Material Complementario</h4>
+                <div class="prompt-example">
+                    "Basado en el esquema del debate, genera 5 preguntas clave que los alumnos deben considerar para preparar sus argumentos, y 3 preguntas de reflexión final para después del debate."
+                </div>
+                <p class="response-hint"><em>Respuesta esperada: Gemini ofrece preguntas para la preparación y para la reflexión post-debate.</em></p>
+            </div>
+            <p class="text-base mt-4">Este ejemplo demuestra cómo Gemini puede ser un <strong class="text-blue-900">compañero interactivo</strong> en todo el proceso de planificación, desde la concepción de la idea hasta la creación de materiales específicos.</p>
+
+            <div class="mt-5 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-600 shadow-sm">
+                <p class="font-semibold text-blue-800 mb-2">🤔 Reflexión:</p>
+                <p class="text-base">De los casos de uso presentados, ¿cuál crees que te sería más útil en tu práctica docente diaria y por qué?</p>
+            </div>
+            <button class="mark-as-read-btn" data-section-id="section1-3" onclick="markSectionAsRead(this)">Marcar como leído</button>
+        </section>
+
+        <section class="module-section p-6 bg-gray-50 rounded-lg shadow-sm border-b-0 mb-0" id="section1-4">
+            <div class="section-progress-indicator text-sm text-gray-600 text-right mb-1 italic">Sección 4 de 4</div>
+            <h2 class="text-blue-600 mt-0 mb-4 text-2xl font-semibold border-b-2 border-blue-600 pb-2 sm:text-xl">Consejos para Prompts Efectivos (Nivel Básico)</h2>
+            <p class="text-base mb-3">La calidad de la respuesta de Gemini depende en gran medida de la <strong class="text-blue-900">calidad de tu prompt</strong>. Aquí algunos consejos clave, con ejemplos, para comunicarte mejor con la IA:</p>
+            <ul class="icon-list">
+                <li class="icon-tip reveal-on-scroll opacity-0 translate-y-5 transition-all duration-500 ease-out mb-3">
+                    <strong class="text-blue-900 font-bold">1. Sé claro y específico:</strong> Evita la ambigüedad. Cuantos más detalles relevantes proporciones, mejor entenderá Gemini tu necesidad.
+                    <ul class="list-disc ml-5 pl-1 mt-2 text-base">
+                        <li class="mb-2"><em>Prompt menos efectivo:</em> "Háblame de planetas."</li>
+                        <li class="mb-2"><em>Prompt más efectivo:</em> "Haz una lista de los planetas rocosos del sistema solar (Mercurio, Venus, Tierra, Marte) y proporciona una breve descripción (2-3 frases) de cada uno, destacando una característica única."</li>
+                        <li class="mb-2"><em>Otro ejemplo efectivo:</em> "Genera 5 ideas de títulos atractivos para una presentación sobre la importancia de la lectura en alumnos de 10-12 años."</li>
+                    </ul>
+                </li>
+                <li class="icon-tip reveal-on-scroll opacity-0 translate-y-5 transition-all duration-500 ease-out mb-3">
+                    <strong class="text-blue-900 font-bold">2. Proporciona contexto:</strong> Informa a Gemini sobre el público objetivo, el propósito o cualquier otra circunstancia relevante.
+                    <ul class="list-disc ml-5 pl-1 mt-2 text-base">
+                        <li class="mb-2"><em>Prompt menos efectivo:</em> "Explica la fotosíntesis."</li>
+                        <li class="mb-2"><em>Prompt más efectivo:</em> "Explica el proceso de la fotosíntesis de forma sencilla, como si se lo contaras a alumnos de 6º de primaria (11-12 años) que no tienen conocimientos previos sobre el tema."</li>
+                        <li class="mb-2"><em>Otro ejemplo efectivo:</em> "Necesito una introducción para un taller de 30 minutos sobre seguridad en internet dirigido a padres de familia. Debe ser empática y resaltar la importancia de la supervisión."</li>
+                    </ul>
+                </li>
+                <li class="icon-tip reveal-on-scroll opacity-0 translate-y-5 transition-all duration-500 ease-out mb-3">
+                    <strong class="text-blue-900 font-bold">3. Pide el formato que deseas:</strong> Indica si quieres una lista, una tabla, un párrafo, un guion, etc.
+                    <ul class="list-disc ml-5 pl-1 mt-2 text-base">
+                        <li class="mb-2"><em>Prompt menos efectivo:</em> "Dame información sobre la Revolución Francesa."</li>
+                        <li class="mb-2"><em>Prompt más efectivo:</em> "Crea una línea de tiempo con los 5 eventos más importantes de la Revolución Francesa, indicando la fecha y una breve descripción de cada evento. Presenta la información en formato de tabla con dos columnas: 'Fecha' y 'Evento'."</li>
+                        <li class="mb-2"><em>Otro ejemplo efectivo:</em> "Escribe un guion corto para un video educativo de 2 minutos explicando el concepto de 'energía renovable' para estudiantes de secundaria, con un narrador y ejemplos visuales."</li>
+                    </ul>
+                </li>
+                <li class="icon-tip reveal-on-scroll opacity-0 translate-y-5 transition-all duration-500 ease-out mb-3">
+                    <strong class="text-blue-900 font-bold">4. Itera y refina (dialoga):</strong> Si la primera respuesta no es exactamente lo que necesitas, no te rindas. Pídele a Gemini que modifique, expanda, resuma o cambie el enfoque de su respuesta anterior.
+                    <ul class="list-disc ml-5 pl-1 mt-2 text-base">
+                        <li class="mb-2"><em>Respuesta inicial de Gemini:</em> (Una lista de ideas generales para un proyecto)</li>
+                        <li class="mb-2"><em>Tu prompt de refinamiento:</em> "Gracias. De esas ideas, me interesa la número 3. ¿Podrías detallar más cómo podría implementarla en una clase de 45 minutos y qué materiales necesitaría?"</li>
+                        <li class="mb-2"><em>Otro ejemplo de refinamiento:</em> "La lista es buena, pero ¿podrías reordenarla por nivel de dificultad, de más fácil a más difícil?"</li>
+                    </ul>
+                </li>
+                 <li class="icon-tip reveal-on-scroll opacity-0 translate-y-5 transition-all duration-500 ease-out mb-3">
+                    <strong class="text-blue-900 font-bold">5. Usa un lenguaje natural pero preciso:</strong> No necesitas usar un lenguaje excesivamente técnico o robótico. Habla con Gemini como lo harías con un asistente humano competente. Sin embargo, la precisión en los términos clave es útil.
+                    <ul class="list-disc ml-5 pl-1 mt-2 text-base">
+                        <li class="mb-2"><em>Prompt aceptable:</em> "Haz un resumen de 'Don Quijote'."</li>
+                        <li class="mb-2"><em>Prompt más preciso (si buscas algo específico):</em> "Resume el argumento principal del primer libro de 'Don Quijote de la Mancha' en aproximadamente 300 palabras, enfocándote en las motivaciones del protagonista."</li>
+                        <li class="mb-2"><em>Otro ejemplo:</em> "Dame ideas para evaluar la comprensión lectora, no solo la memorización, en un texto de nivel C1 de inglés."</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="mt-5 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-600 shadow-sm">
+                <p class="font-semibold text-blue-800 mb-2">🤔 Reflexión:</p>
+                <p class="text-base">¿Cuál de los <strong class="text-blue-900">"Errores Comunes al Crear Prompts"</strong> crees que es el más fácil de cometer para ti, y cómo podrías aplicar los consejos aprendidos para evitarlo en el futuro?</p>
+            </div>
+            <button class="mark-as-read-btn" data-section-id="section1-4" onclick="markSectionAsRead(this)">Marcar como leído</button>
+        </section>
+
+        <div class="interactive-activity animate-fadeIn bg-blue-50 p-6 mt-8 rounded-lg border border-blue-200 shadow-md" id="activityQuiz">
+            <h3 class="text-blue-700 mt-0 text-xl font-semibold border-b border-blue-300 pb-2 mb-5 sm:text-lg">Actividad 1: Conceptos Clave de Gemini</h3>
+            <div class="quiz-question mb-5" id="quizQ1Container">
+                <p class="font-bold mb-2 text-base">1. ¿Qué es principalmente Google Gemini?</p>
+                <div class="quiz-options">
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="q1" value="a" class="mr-3 align-middle"> a) Un buscador de imágenes avanzado</label>
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="q1" value="b" class="mr-3 align-middle"> b) Un asistente de IA conversacional capaz de entender y generar texto</label>
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="q1" value="c" class="mr-3 align-middle"> c) Un software exclusivo para editar videos educativos</label>
+                </div>
+                <div class="feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]" id="feedbackQ1"></div>
+            </div>
+
+            <div class="quiz-question mb-5" id="quizQ2Container">
+                <p class="font-bold mb-2 text-base">2. Para obtener buenas respuestas de Gemini, tu 'prompt' debe ser preferiblemente:</p>
+                <div class="quiz-options">
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="q2" value="a" class="mr-3 align-middle"> a) Muy corto y lo más vago posible para darle libertad creativa</label>
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="q2" value="b" class="mr-3 align-middle"> b) Claro, específico y con contexto relevante</label>
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="q2" value="c" class="mr-3 align-middle"> c) Escrito siempre en mayúsculas y con lenguaje técnico</label>
+                </div>
+                <div class="feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]" id="feedbackQ2"></div>
+            </div>
+            <div class="activity-buttons mt-4 flex gap-2 flex-wrap">
+                <button class="module-button px-5 py-3 bg-blue-600 text-white border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-blue-700 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="submitQuizBtn" onclick="submitQuiz()">Enviar Respuestas del Quiz</button>
+                <button class="module-button reset-btn px-5 py-3 bg-yellow-400 text-gray-900 border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-yellow-500 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="resetQuizBtn" onclick="resetQuiz()" disabled>Reiniciar Quiz</button>
+            </div>
+        </div>
+
+        <div class="interactive-activity animate-fadeIn bg-blue-50 p-6 mt-8 rounded-lg border border-blue-200 shadow-md" id="activityExercise">
+            <h3 class="text-blue-700 mt-0 text-xl font-semibold border-b border-blue-300 pb-2 mb-5 sm:text-lg">Actividad 2: Genera Ideas con Gemini</h3>
+            <p class="text-base mb-3">Imagina que necesitas ideas para un proyecto sobre el <strong class="text-blue-900 font-bold">cambio climático</strong> para tus alumnos de secundaria. Escribe en el siguiente cuadro un prompt sencillo pero efectivo que le harías a Gemini (o una herramienta similar):</p>
+            <textarea id="geminiPromptExercise" placeholder="Ej: 'Gemini, dame 3 ideas de proyectos sobre el cambio climático para alumnos de 15 años...'" class="w-full p-3 mt-2 mb-4 border border-gray-300 rounded-md min-h-[90px] focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"></textarea>
+            <div class="activity-buttons mt-4 flex gap-2 flex-wrap">
+                <button class="module-button px-5 py-3 bg-blue-600 text-white border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-blue-700 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="submitExerciseBtn" onclick="submitPromptExercise()">Enviar Ejercicio</button>
+                <button class="module-button reset-btn px-5 py-3 bg-yellow-400 text-gray-900 border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-yellow-500 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="resetExerciseBtn" onclick="resetPromptExercise()" disabled>Reiniciar Ejercicio</button>
+            </div>
+            <div class="feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]" id="feedbackExercise"></div>
+
+            <div id="selfEvaluationSection" class="mt-6 p-4 bg-gray-100 rounded-lg border border-gray-200 shadow-sm hidden">
+                <h4 class="font-bold mb-3 text-blue-700 text-lg">Autoevalúa tu Prompt:</h4>
+                <p class="mb-4 text-base">Revisa tu prompt utilizando los siguientes criterios. Marca las casillas que consideres que tu prompt cumple:</p>
+                <ul class="list-disc ml-5 pl-1 text-base">
+                    <li class="mb-2">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" id="evalClaroEspecifico">
+                            <span class="ml-2 text-gray-800">Mi prompt es <strong class="text-blue-900">claro y específico</strong>.</span>
+                        </label>
+                    </li>
+                    <li class="mb-2">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" id="evalContexto">
+                            <span class="ml-2 text-gray-800">Mi prompt proporciona <strong class="text-blue-900">contexto</strong> suficiente.</span>
+                        </label>
+                    </li>
+                    <li class="mb-2">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" id="evalFormato">
+                            <span class="ml-2 text-gray-800">Mi prompt pide el <strong class="text-blue-900">formato</strong> deseado.</span>
+                        </label>
+                    </li>
+                </ul>
+                <p class="text-sm italic mt-3 text-gray-600">Reflexiona sobre estas preguntas. Un prompt bien elaborado te dará mejores resultados con la IA. Si crees que puedes mejorarlo, reinicia el ejercicio.</p>
+                <button class="module-button px-5 py-3 bg-green-600 text-white border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-green-700 hover:-translate-y-px active:translate-y-0 mt-4" id="awardExercisePointsBtn" onclick="awardExercisePoints()">Marcar como Completado (Autoevaluado)</button>
+            </div>
+        </div>
+
+        <div class="interactive-activity animate-fadeIn bg-blue-50 p-6 mt-8 rounded-lg border border-blue-200 shadow-md" id="activityProblemSolving">
+            <h3 class="text-blue-700 mt-0 text-xl font-semibold border-b border-blue-300 pb-2 mb-5 sm:text-lg">Actividad 3: Escenario de Resolución de Problemas</h3>
+            <p class="text-base mb-3">Imagina que te enfrentas al siguiente desafío en tu aula: <strong class="text-blue-900">"Mis alumnos de 12 años tienen dificultades para entender las fracciones y se aburren con los métodos tradicionales."</strong></p>
+            <p class="text-base mb-3">Escribe un prompt que le harías a Gemini para que te ayude a crear una estrategia innovadora y divertida para enseñar fracciones a este grupo.</p>
+            <textarea id="problemSolvingPrompt" placeholder="Ej: 'Actúa como un experto en pedagogía. Necesito 3 ideas de juegos interactivos para enseñar fracciones a alumnos de 12 años que están aburridos con los métodos actuales...'" class="w-full p-3 mt-2 mb-4 border border-gray-300 rounded-md min-h-[90px] focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"></textarea>
+            <div class="activity-buttons mt-4 flex gap-2 flex-wrap">
+                <button class="module-button px-5 py-3 bg-blue-600 text-white border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-blue-700 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="submitProblemSolvingBtn" onclick="submitProblemSolving()">Enviar Problema</button>
+                <button class="module-button reset-btn px-5 py-3 bg-yellow-400 text-gray-900 border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-yellow-500 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="resetProblemSolvingBtn" onclick="resetProblemSolving()" disabled>Reiniciar Problema</button>
+            </div>
+            <div class="feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]" id="feedbackProblemSolving"></div>
+        </div>
+
+        <div class="interactive-activity animate-fadeIn bg-blue-50 p-6 mt-8 rounded-lg border border-blue-200 shadow-md" id="activityMatching">
+            <h3 class="text-blue-700 mt-0 text-xl font-semibold border-b border-blue-300 pb-2 mb-5 sm:text-lg">Actividad 4: Emparejamiento de Conceptos</h3>
+            <p class="text-base mb-3">Empareja cada capacidad de Gemini con su beneficio principal en el aula. Selecciona la opción correcta en cada lista desplegable.</p>
+            <div class="matching-container">
+                <div class="matching-pair">
+                    <p class="concept">Capacidad: Generación de ideas para proyectos</p>
+                    <select id="match1">
+                        <option value="">Selecciona un beneficio</option>
+                        <option value="a">Ahorrar tiempo en corrección</option>
+                        <option value="b">Superar el bloqueo creativo</option>
+                        <option value="c">Automatizar la evaluación</option>
+                    </select>
+                    <div class="feedback-match" id="feedbackMatch1"></div>
+                </div>
+                <div class="matching-pair">
+                    <p class="concept">Capacidad: Resúmenes rápidos de textos</p>
+                    <select id="match2">
+                        <option value="">Selecciona un beneficio</option>
+                        <option value="a">Ahorrar tiempo en investigación</option>
+                        <option value="b">Crear presentaciones visuales</option>
+                        <option value="c">Realizar encuestas a alumnos</option>
+                    </select>
+                    <div class="feedback-match" id="feedbackMatch2"></div>
+                </div>
+                <div class="matching-pair">
+                    <p class="concept">Capacidad: Adaptación de materiales a niveles</p>
+                    <select id="match3">
+                        <option value="">Selecciona un beneficio</option>
+                        <option value="a">Gestionar horarios de clase</option>
+                        <option value="b">Atender la diversidad de niveles de aprendizaje</option>
+                        <option value="c">Organizar eventos escolares</option>
+                    </select>
+                    <div class="feedback-match" id="feedbackMatch3"></div>
+                </div>
+            </div>
+            <div class="activity-buttons mt-4 flex gap-2 flex-wrap">
+                <button class="module-button px-5 py-3 bg-blue-600 text-white border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-blue-700 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="submitMatchingBtn" onclick="submitMatching()">Verificar Emparejamiento</button>
+                <button class="module-button reset-btn px-5 py-3 bg-yellow-400 text-gray-900 border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-yellow-500 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="resetMatchingBtn" onclick="resetMatching()" disabled>Reiniciar Emparejamiento</button>
+            </div>
+            <div class="feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]" id="feedbackMatching"></div>
+        </div>
+
+        <div class="interactive-activity animate-fadeIn bg-blue-50 p-6 mt-8 rounded-lg border border-blue-200 shadow-md" id="activityTrueFalse">
+            <h3 class="text-blue-700 mt-0 text-xl font-semibold border-b border-blue-300 pb-2 mb-5 sm:text-lg">Actividad 5: Verdadero o Falso</h3>
+            <p class="text-base mb-3">Indica si las siguientes afirmaciones sobre Gemini son Verdaderas o Falsas.</p>
+            
+            <div class="quiz-question mb-5" id="tfQ1Container">
+                <p class="font-bold mb-2 text-base">1. Gemini solo puede generar texto si se le proporciona una imagen como entrada.</p>
+                <div class="quiz-options">
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="tfQ1" value="false" class="mr-3 align-middle"> Falso</label>
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="tfQ1" value="true" class="mr-3 align-middle"> Verdadero</label>
+                </div>
+                <div class="feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]" id="feedbackTfQ1"></div>
+            </div>
+
+            <div class="quiz-question mb-5" id="tfQ2Container">
+                <p class="font-bold mb-2 text-base">2. La "Fórmula del Prompt Básico" incluye el Rol, la Tarea, el Contexto y el Formato deseado.</p>
+                <div class="quiz-options">
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="tfQ2" value="false" class="mr-3 align-middle"> Falso</label>
+                    <label class="block mb-2 cursor-pointer p-3 rounded-md transition-colors bg-white border border-gray-300 hover:bg-blue-50 text-base"><input type="radio" name="tfQ2" value="true" class="mr-3 align-middle"> Verdadero</label>
+                </div>
+                <div class="feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]" id="feedbackTfQ2"></div>
+            </div>
+
+            <div class="activity-buttons mt-4 flex gap-2 flex-wrap">
+                <button class="module-button px-5 py-3 bg-blue-600 text-white border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-blue-700 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="submitTrueFalseBtn" onclick="submitTrueFalse()">Enviar Respuestas</button>
+                <button class="module-button reset-btn px-5 py-3 bg-yellow-400 text-gray-900 border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-yellow-500 hover:-translate-y-px active:translate-y-0 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none disabled:opacity-70" id="resetTrueFalseBtn" onclick="resetTrueFalse()" disabled>Reiniciar Actividad</button>
+            </div>
+        </div>
+        
+        <div id="moduleScore" class="text-center text-xl font-bold mt-6 p-4 bg-blue-50 rounded-lg text-blue-900 shadow-sm">Puntuación del Módulo: 0 puntos</div>
+
+        <section class="module-section mt-10 p-6 bg-gray-50 rounded-lg shadow-sm" id="section-summary">
+            <h2 class="text-blue-600 mt-0 mb-4 text-2xl font-semibold border-b-2 border-blue-600 pb-2 sm:text-xl">Resumen del Módulo 1</h2>
+            <p class="text-base mb-3">En este módulo, hemos explorado los fundamentos de Google Gemini y cómo esta potente herramienta de inteligencia artificial puede ser un aliado invaluable en tu práctica docente. Recapitulamos los puntos clave:</p>
+            <ul class="list-disc ml-5 pl-1 text-base mb-4">
+                <li><strong>Google Gemini:</strong> Un modelo de lenguaje grande (LLM) capaz de entender y generar texto de manera creativa y contextualizada.</li>
+                <li><strong>Prompts Efectivos:</strong> Aprendimos la "Fórmula del Prompt Básico" (Rol, Tarea, Contexto, Formato) para comunicarnos de forma clara y obtener respuestas precisas.</li>
+                <li><strong>Aplicaciones Prácticas:</strong> Vimos cómo Gemini puede ayudarte en la lluvia de ideas, generación de preguntas, creación de contenido, borradores de comunicaciones y adaptación de materiales.</li>
+                <li><strong>Consejos Clave:</strong> La claridad, el contexto, el formato deseado y la iteración son fundamentales para optimizar tus interacciones con la IA.</li>
+            </ul>
+            <p class="text-base italic text-gray-700">Recuerda que la práctica constante y la experimentación son la clave para dominar el arte de interactuar con la IA y desbloquear su máximo potencial en tu aula.</p>
+            <button class="mark-as-read-btn" data-section-id="section-summary" onclick="markSectionAsRead(this)">Marcar como leído</button>
+        </section>
+
+        <section class="module-section mt-10 p-6 bg-blue-100 rounded-lg shadow-sm text-center" id="section-conclusion">
+            <h2 class="text-blue-700 mt-0 mb-4 text-2xl font-semibold border-b-2 border-blue-700 pb-2 sm:text-xl">Conclusión y Próximos Pasos</h2>
+            <p class="text-base mb-4">¡Felicidades por completar el primer módulo! Has dado un paso fundamental para integrar la inteligencia artificial en tu práctica docente. Recuerda que Gemini es una herramienta poderosa que, usada éticamente y con creatividad, puede <strong class="text-blue-900">amplificar tu potencial</strong> y el de tus alumnos.</p>
+            <p class="text-base mb-6">Te animamos a <strong class="text-blue-900">experimentar</strong> con los prompts aprendidos, a explorar las diferentes funcionalidades de Gemini y a compartir tus descubrimientos con tus colegas. La mejor manera de dominar estas herramientas es a través de la práctica.</p>
+            <p class="text-lg font-bold text-blue-800 mb-6">¡Tu aula es el laboratorio perfecto para la innovación!</p>
+            <div class="mt-6 flex flex-col items-center gap-4">
+                <button class="module-button px-6 py-3 bg-blue-600 text-white border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-blue-700 hover:-translate-y-px active:translate-y-0" onclick="goToNextModule()">
+                    Continuar al Módulo 2
+                </button>
+                <a href="#" onclick="showCustomModal('¡Excelente! Te animamos a seguir explorando y practicando. Puedes volver a cualquier sección del módulo o reiniciar las actividades para reforzar tu aprendizaje.'); return false;" class="text-blue-600 hover:underline text-sm">
+                    ¿Necesitas más práctica? Reinicia las actividades.
+                </a>
+            </div>
+        </section>
+
+        <section class="module-section mt-10 p-6 bg-gray-50 rounded-lg shadow-sm" id="section-bibliography">
+            <h2 class="text-blue-600 mt-0 mb-4 text-2xl font-semibold border-b-2 border-blue-600 pb-2 sm:text-xl">Bibliografía y Recursos Adicionales</h2>
+            <p class="text-base mb-4">Aquí encontrarás enlaces a recursos que te ayudarán a profundizar en el uso de Google Gemini y la IA en la educación:</p>
+            <ul class="list-disc ml-5 pl-1 text-base">
+                <li class="mb-2"><a href="#" onclick="openPopup('https://edu.google.com/workspace-for-education/add-ons/gemini-education/'); return false;" class="text-blue-600 hover:underline">Google for Education: Más información sobre Google Workspace con Gemini</a></li>
+                <li class="mb-2"><a href="#" onclick="openPopup('https://ai.google/'); return false;" class="text-blue-600 hover:underline">Google AI: Cómo estamos haciendo la IA útil para todos</a></li>
+                <li class="mb-2"><a href="#" onclick="openPopup('https://deepmind.google/models/gemini/'); return false;" class="text-blue-600 hover:underline">Google DeepMind: Gemini - Nuestros modelos de IA más inteligentes</a></li>
+                <li class="mb-2"><a href="#" onclick="openPopup('https://www.infobae.com/tecno/2024/07/01/guia-de-uso-gratuito-de-gemini-la-inteligencia-artificial-de-google/'); return false;" class="text-blue-600 hover:underline">Infobae: Guía de uso gratuito de Gemini, la inteligencia artificial de Google</a></li>
+                <li class="mb-2"><a href="#" onclick="openPopup('https://www.educaciontrespuntocero.com/noticias/usar-gemini-en-el-aula/'); return false;" class="text-blue-600 hover:underline">Educación 3.0: Apunta estas 20 formas de usar Gemini para sacarle el máximo partido en el aula</a></li>
+            </ul>
+        </section>
+
+        <div class="navigation-footer text-center mt-10 pt-5 border-t border-gray-200 flex justify-center gap-2 flex-wrap">
+            <button class="module-button secondary px-5 py-3 bg-gray-500 text-white border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-gray-600 hover:-translate-y-px active:translate-y-0" onclick="goToMainMenu()">Volver al Menú de Módulos</button>
+            <button class="module-button px-5 py-3 bg-blue-600 text-white border-none rounded-md cursor-pointer text-base transition-all duration-300 ease-in-out shadow-md hover:bg-blue-700 hover:-translate-y-px active:translate-y-0" onclick="goToNextModule()">Ir al Módulo 2 (Próximamente)</button>
+        </div>
+    </div>
+
+    <button id="scrollTopBtn" title="Volver Arriba" class="hidden fixed bottom-8 right-8 z-50 border-none outline-none bg-blue-600 text-white cursor-pointer p-4 rounded-full text-lg shadow-lg transition-all duration-300 hover:bg-blue-700 md:bottom-5 md:right-5 md:p-3 md:text-base">⇧</button>
+
+    <div id="customModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10000] hidden p-4">
+        <div class="bg-white p-8 rounded-lg shadow-xl max-w-sm w-full text-center">
+            <p id="modalMessage" class="text-lg font-semibold mb-6 text-gray-800"></p>
+            <button id="modalCloseBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-md">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        // Variables para la puntuación y elementos del DOM
+        let currentModuleScore = 0;
+        const MAX_QUIZ_POINTS_PER_QUESTION = 10;
+        const EXERCISE_POINTS = 15; // Puntos fijos por completar el ejercicio de prompt
+        const PROBLEM_SOLVING_POINTS = 20; // Puntos para la actividad de resolución de problemas
+        const MATCHING_POINTS_PER_PAIR = 5; // Puntos por cada par correcto en la actividad de emparejamiento
+        const TRUE_FALSE_POINTS_PER_QUESTION = 10; // Puntos para la actividad de Verdadero/Falso
+
+        // Elementos de la portada
+        const coverPage = document.getElementById('coverPage');
+        const startModuleBtn = document.getElementById('startModuleBtn');
+        const moduleContainer = document.querySelector('.module-container');
+
+        const quizActivity = document.getElementById('activityQuiz');
+        const exerciseActivity = document.getElementById('activityExercise');
+        const problemSolvingActivity = document.getElementById('activityProblemSolving');
+        const matchingActivity = document.getElementById('activityMatching');
+        const activityTrueFalse = document.getElementById('activityTrueFalse'); // Nueva actividad
+
+        const submitQuizBtn = document.getElementById('submitQuizBtn');
+        const resetQuizBtn = document.getElementById('resetQuizBtn');
+        const feedbackQ1 = document.getElementById('feedbackQ1');
+        const feedbackQ2 = document.getElementById('feedbackQ2');
+        const q1Radios = document.querySelectorAll('input[name="q1"]');
+        const q2Radios = document.querySelectorAll('input[name="q2"]'); // Fixed selector here
+
+        const submitExerciseBtn = document.getElementById('submitExerciseBtn');
+        const resetExerciseBtn = document.getElementById('resetExerciseBtn');
+        const geminiPromptExerciseTextarea = document.getElementById('geminiPromptExercise');
+        const feedbackExercise = document.getElementById('feedbackExercise');
+        const selfEvaluationSection = document.getElementById('selfEvaluationSection');
+        const awardExercisePointsBtn = document.getElementById('awardExercisePointsBtn');
+        
+        // Elementos de la Actividad 3: Resolución de Problemas
+        const problemSolvingPromptTextarea = document.getElementById('problemSolvingPrompt');
+        const submitProblemSolvingBtn = document.getElementById('submitProblemSolvingBtn');
+        const resetProblemSolvingBtn = document.getElementById('resetProblemSolvingBtn');
+        const feedbackProblemSolving = document.getElementById('feedbackProblemSolving');
+
+        // Elementos de la Actividad 4: Emparejamiento de Conceptos
+        const match1Select = document.getElementById('match1');
+        const match2Select = document.getElementById('match2');
+        const match3Select = document.getElementById('match3');
+        const feedbackMatch1 = document.getElementById('feedbackMatch1');
+        const feedbackMatch2 = document.getElementById('feedbackMatch2');
+        const feedbackMatch3 = document.getElementById('feedbackMatch3');
+        const submitMatchingBtn = document.getElementById('submitMatchingBtn');
+        const resetMatchingBtn = document.getElementById('resetMatchingBtn');
+        const feedbackMatching = document.getElementById('feedbackMatching');
+
+        // Elementos de la Actividad 5: Verdadero o Falso
+        const tfQ1Radios = document.querySelectorAll('input[name="tfQ1"]');
+        const tfQ2Radios = document.querySelectorAll('input[name="tfQ2"]');
+        const feedbackTfQ1 = document.getElementById('feedbackTfQ1');
+        const feedbackTfQ2 = document.getElementById('feedbackTfQ2');
+        const submitTrueFalseBtn = document.getElementById('submitTrueFalseBtn');
+        const resetTrueFalseBtn = document.getElementById('resetTrueFalseBtn');
+
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        const moduleProgressBar = document.getElementById("moduleProgressBar");
+        const sections = document.querySelectorAll('.module-section'); // Todas las secciones de contenido
+
+        // Elementos del modal personalizado
+        const customModal = document.getElementById('customModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        // Función para mostrar el modal personalizado
+        function showCustomModal(message) {
+            modalMessage.textContent = message;
+            customModal.classList.remove('hidden'); // Mostrar el modal
+        }
+
+        // Función para ocultar el modal personalizado
+        function hideCustomModal() {
+            customModal.classList.add('hidden'); // Ocultar el modal
+        }
+
+        // Event listener para cerrar el modal
+        modalCloseBtn.addEventListener('click', hideCustomModal);
+
+        // Función para abrir enlaces en una ventana emergente
+        function openPopup(url) {
+            // Intenta abrir una ventana emergente con características específicas
+            const newWindow = window.open(url, '_blank', 'width=800,height=600,resizable=yes,scrollbars=yes');
+            // Si la ventana no se abre (ej. bloqueador de popups), intenta abrir en una nueva pestaña como fallback
+            if (!newWindow || newWindow.closed || typeof newWindow.focus !== 'function') {
+                window.open(url, '_blank');
+            } else {
+                newWindow.focus(); // Enfoca la nueva ventana si se abrió correctamente
+            }
+        }
+
+        // Lógica para mostrar/ocultar el botón de "Volver Arriba"
+        window.onscroll = function() {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                scrollTopBtn.style.display = "block"; // Mostrar el botón
+            } else {
+                scrollTopBtn.style.display = "none"; // Ocultar el botón
+            }
+            updateProgressBar(); // Actualizar la barra de progreso al hacer scroll
+        };
+        // Event listener para el botón de "Volver Arriba"
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({top: 0, behavior: 'smooth'}); // Desplazamiento suave al inicio
+        });
+
+        // Función para actualizar la barra de progreso
+        function updateProgressBar() {
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = document.documentElement.scrollTop;
+            const progress = (scrolled / scrollHeight) * 100;
+            moduleProgressBar.style.width = progress + '%';
+        }
+
+        // Función para marcar una sección como leída
+        function markSectionAsRead(button) {
+            const sectionId = button.dataset.sectionId;
+            const section = document.getElementById(sectionId);
+            if (section) {
+                button.textContent = 'Completado ✅';
+                button.classList.add('completed');
+                button.disabled = true; // Deshabilitar el botón una vez marcado
+                showCustomModal(`¡Has marcado la sección "${section.querySelector('h2').textContent}" como leída!`);
+            }
+        }
+
+        // Función para iniciar el módulo (oculta la portada, muestra el contenido)
+        function startModule() {
+            console.log("Start Module button clicked!"); // Debugging line
+            coverPage.classList.add('hidden');
+            coverPage.style.display = 'none'; // Ensure it's hidden
+            moduleContainer.classList.remove('hidden');
+            moduleContainer.style.display = 'block'; // Ensure it's visible (assuming block layout)
+            updateProgressBar(); // Inicializa la barra de progreso una vez el contenido es visible
+            window.scrollTo({top: 0, behavior: 'smooth'}); // Desplazarse al inicio del módulo
+        }
+
+        // Se ejecuta cuando el DOM está completamente cargado
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicialmente, oculta el contenido del módulo y muestra la portada
+            moduleContainer.classList.add('hidden');
+            coverPage.classList.remove('hidden');
+
+            // Asigna el evento al botón de inicio
+            startModuleBtn.addEventListener('click', startModule);
+
+            // Observador de intersección para animaciones al hacer scroll
+            const elementsToReveal = document.querySelectorAll('.reveal-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible'); // Añadir clase 'visible' para activar la animación
+                        observer.unobserve(entry.target); // Dejar de observar una vez visible
+                    }
+                });
+            }, { threshold: 0.1 }); // Se activa cuando el 10% del elemento es visible
+            elementsToReveal.forEach(el => observer.observe(el));
+            
+            // Inicializar la puntuación de las actividades a 0
+            quizActivity.dataset.lastScore = "0";
+            exerciseActivity.dataset.lastScore = "0";
+            problemSolvingActivity.dataset.lastScore = "0";
+            matchingActivity.dataset.lastScore = "0";
+            activityTrueFalse.dataset.lastScore = "0"; // Inicializar nueva actividad
+            
+            updateScoreDisplay(); // Actualizar la visualización de la puntuación
+            resetQuizBtn.disabled = true; // Deshabilitar botón de reiniciar quiz al inicio
+            resetExerciseBtn.disabled = true; // Deshabilitar botón de reiniciar ejercicio al inicio
+            awardExercisePointsBtn.disabled = true; // Deshabilitar el botón de autoevaluación al inicio
+            resetProblemSolvingBtn.disabled = true; // Deshabilitar botón de reiniciar problema al inicio
+            resetMatchingBtn.disabled = true; // Deshabilitar botón de reiniciar emparejamiento al inicio
+            resetTrueFalseBtn.disabled = true; // Deshabilitar botón de reiniciar Verdadero/Falso al inicio
+
+            // La barra de progreso se actualizará al iniciar el módulo con startModule()
+        });
+
+        // Función para enviar las respuestas del quiz
+        function submitQuiz() {
+            let previousQuizScore = parseInt(quizActivity.dataset.lastScore || "0");
+            let scoreQ1 = 0;
+            let scoreQ2 = 0;
+            const answerQ1 = document.querySelector('input[name="q1"]:checked');
+            const answerQ2 = document.querySelector('input[name="q2"]:checked');
+            let q1Attempted = false;
+            let q2Attempted = false;
+            
+            // Evaluar Pregunta 1
+            if (answerQ1) {
+                q1Attempted = true;
+                if (answerQ1.value === 'b') {
+                    feedbackQ1.textContent = '¡Correcto! Gemini es un asistente de IA conversacional, diseñado para entender y generar texto.';
+                    feedbackQ1.className = 'feedback correct bg-green-100 text-green-800 border border-green-200';
+                    scoreQ1 = MAX_QUIZ_POINTS_PER_QUESTION;
+                } else {
+                    feedbackQ1.innerHTML = 'Incorrecto. Gemini es un modelo de lenguaje grande (LLM) que se enfoca en la conversación y generación de texto, no solo en la búsqueda de imágenes o edición de video. Revisa la <a href="#section1-1" class="text-blue-600 underline" onclick="hideCustomModal();">sección "¿Qué es Google Gemini?"</a> para más detalles.';
+                    feedbackQ1.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+                }
+            } else {
+                feedbackQ1.textContent = 'Por favor, selecciona una respuesta para la pregunta 1.';
+                feedbackQ1.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+            }
+
+            // Evaluar Pregunta 2
+            if (answerQ2) {
+                q2Attempted = true;
+                if (answerQ2.value === 'b') {
+                    feedbackQ2.textContent = '¡Correcto! Un prompt claro, específico y con contexto relevante es clave para obtener buenas respuestas de Gemini.';
+                    feedbackQ2.className = 'feedback correct bg-green-100 text-green-800 border border-green-200';
+                    scoreQ2 = MAX_QUIZ_POINTS_PER_QUESTION;
+                } else {
+                    feedbackQ2.innerHTML = 'Incorrecto. Los prompts deben ser lo más específicos posible, proporcionando contexto y el formato deseado, para guiar a la IA. Un prompt vago o técnico sin necesidad no ayudará. Revisa la <a href="#section1-4" class="text-blue-600 underline" onclick="hideCustomModal();">sección "Consejos para Prompts Efectivos"</a>.';
+                    feedbackQ2.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+                }
+            } else {
+                feedbackQ2.textContent = 'Por favor, selecciona una respuesta para la pregunta 2.';
+                feedbackQ2.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+            }
+            
+            // Si ambas preguntas han sido intentadas, actualizar puntuación
+            if (q1Attempted && q2Attempted) {
+                currentModuleScore -= previousQuizScore; // Restar la puntuación anterior del quiz
+                let currentAttemptScore = scoreQ1 + scoreQ2;
+                currentModuleScore += currentAttemptScore; // Sumar la nueva puntuación
+                quizActivity.dataset.lastScore = currentAttemptScore.toString(); // Guardar la puntuación de este intento
+                updateScoreDisplay(); // Actualizar la visualización
+
+                // Mostrar feedback general con el modal personalizado
+                if(currentAttemptScore === (MAX_QUIZ_POINTS_PER_QUESTION * 2)) { 
+                    showCustomModal("¡Excelente! Ambas respuestas del quiz son correctas. Has obtenido " + currentAttemptScore + " puntos.");
+                } else if (currentAttemptScore > 0) {
+                     showCustomModal("¡Bien hecho en el quiz! Has obtenido " + currentAttemptScore + " puntos en este intento.");
+                } else {
+                    showCustomModal("Algunas respuestas no fueron correctas. ¡Puedes reiniciar e intentarlo de nuevo!");
+                }
+                
+                // Deshabilitar opciones y botón de enviar, habilitar reiniciar
+                q1Radios.forEach(input => input.disabled = true);
+                q2Radios.forEach(input => input.disabled = true);
+                submitQuizBtn.disabled = true;
+                resetQuizBtn.disabled = false; 
+            }
+        }
+
+        // Función para reiniciar el quiz
+        function resetQuiz() {
+            let lastQuizScore = parseInt(quizActivity.dataset.lastScore || "0");
+            currentModuleScore -= lastQuizScore; // Restar la última puntuación del quiz
+            quizActivity.dataset.lastScore = "0"; // Resetear la puntuación del quiz
+
+            // Habilitar y desmarcar radios
+            q1Radios.forEach(radio => { radio.checked = false; radio.disabled = false; });
+            q2Radios.forEach(radio => { radio.checked = false; radio.disabled = false; });
+
+            // Limpiar feedback
+            feedbackQ1.textContent = '';
+            feedbackQ1.className = 'feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]';
+            feedbackQ2.textContent = '';
+            feedbackQ2.className = 'feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]';
+
+            submitQuizBtn.disabled = false; // Habilitar botón de enviar
+            resetQuizBtn.disabled = true; // Deshabilitar botón de reiniciar
+
+            updateScoreDisplay(); // Actualizar la visualización
+            showCustomModal('Quiz reiniciado. ¡Puedes intentarlo de nuevo!'); // Mensaje de reinicio
+        }
+
+        // Función para enviar el ejercicio de prompt
+        function submitPromptExercise() {
+            const promptText = geminiPromptExerciseTextarea.value.trim();
+            
+            // Criterios de evaluación inicial del prompt (más robustos que solo longitud)
+            const hasIdeasKeyword = promptText.toLowerCase().includes('ideas');
+            const hasClimateChangeKeyword = promptText.toLowerCase().includes('cambio climático');
+            const isLongEnough = promptText.length > 50; // Aumentar la longitud mínima para un prompt "detallado"
+
+            if (hasIdeasKeyword && hasClimateChangeKeyword && isLongEnough) {
+                feedbackExercise.textContent = "¡Buen intento! Tu prompt es lo suficientemente detallado para empezar. Ahora, ¡autoevalúalo usando las casillas de abajo!";
+                feedbackExercise.className = 'feedback correct bg-green-100 text-green-800 border border-green-200';
+                
+                submitExerciseBtn.disabled = true; // Deshabilitar botón de enviar
+                geminiPromptExerciseTextarea.disabled = true; // Deshabilitar textarea
+                resetExerciseBtn.disabled = false; // Habilitar botón de reiniciar
+                selfEvaluationSection.classList.remove('hidden'); // Mostrar la sección de autoevaluación
+                awardExercisePointsBtn.disabled = false; // Habilitar el botón para marcar como completado
+            } else {
+                feedbackExercise.textContent = 'Tu prompt necesita más detalles. Asegúrate de incluir palabras clave como "ideas" y "cambio climático", y que sea lo suficientemente largo para ser específico.';
+                feedbackExercise.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+                showCustomModal("Tu prompt necesita más detalles. Asegúrate de incluir palabras clave como 'ideas' y 'cambio climático' y que sea lo suficientemente largo.");
+            }
+        }
+
+        // Nueva función para otorgar puntos después de la autoevaluación del prompt
+        function awardExercisePoints() {
+            let previousExerciseScore = parseInt(exerciseActivity.dataset.lastScore || "0");
+            
+            // Si no se han otorgado puntos antes para este intento
+            if (previousExerciseScore === 0) {
+                // Verificar si al menos una casilla de autoevaluación está marcada
+                const evalClaroEspecifico = document.getElementById('evalClaroEspecifico').checked;
+                const evalContexto = document.getElementById('evalContexto').checked;
+                const evalFormato = document.getElementById('evalFormato').checked;
+
+                if (evalClaroEspecifico || evalContexto || evalFormato) {
+                    currentModuleScore += EXERCISE_POINTS;
+                    exerciseActivity.dataset.lastScore = EXERCISE_POINTS.toString();
+                    updateScoreDisplay();
+                    showCustomModal("¡Has autoevaluado tu prompt y has obtenido " + EXERCISE_POINTS + " puntos por completar el ejercicio!");
+                    awardExercisePointsBtn.disabled = true; // Deshabilitar el botón una vez que se otorgan los puntos
+                } else {
+                    showCustomModal("Por favor, marca al menos una casilla en la autoevaluación para indicar que has reflexionado sobre tu prompt.");
+                }
+            } else {
+                showCustomModal("Ya has completado y obtenido puntos por este ejercicio.");
+            }
+        }
+
+
+        // Función para reiniciar el ejercicio de prompt
+        function resetPromptExercise() {
+            let lastExerciseScore = parseInt(exerciseActivity.dataset.lastScore || "0");
+            currentModuleScore -= lastExerciseScore; // Restar la última puntuación del ejercicio
+            exerciseActivity.dataset.lastScore = "0"; // Resetear la puntuación del ejercicio
+
+            geminiPromptExerciseTextarea.value = ''; // Limpiar textarea
+            geminiPromptExerciseTextarea.disabled = false; // Habilitar textarea
+
+            // Desmarcar casillas de autoevaluación
+            document.getElementById('evalClaroEspecifico').checked = false;
+            document.getElementById('evalContexto').checked = false;
+            document.getElementById('evalFormato').checked = false;
+
+            feedbackExercise.textContent = ''; // Limpiar feedback
+            feedbackExercise.className = 'feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]';
+            selfEvaluationSection.classList.add('hidden'); // Ocultar la sección de autoevaluación
+            awardExercisePointsBtn.disabled = true; // Deshabilitar el botón de autoevaluación
+
+            submitExerciseBtn.disabled = false; // Habilitar botón de enviar
+            resetExerciseBtn.disabled = true; // Deshabilitar botón de reiniciar
+
+            updateScoreDisplay(); // Actualizar la visualización
+            showCustomModal('Ejercicio reiniciado. ¡Puedes intentarlo de nuevo!'); // Mensaje de reinicio
+        }
+
+        // Lógica para la Actividad 3: Resolución de Problemas
+        function submitProblemSolving() {
+            const promptText = problemSolvingPromptTextarea.value.trim();
+            const keywords = ['gemini', 'ayuda', 'resolver', 'problema', 'estrategia', 'innovadora', 'divertida', 'enseñar', 'fracciones', 'alumnos', 'juegos']; // Añadido 'juegos' como palabra clave
+            const containsKeywords = keywords.some(keyword => promptText.toLowerCase().includes(keyword));
+            const isLongEnough = promptText.length > 70; // Requiere un prompt más elaborado
+
+            let previousProblemSolvingScore = parseInt(problemSolvingActivity.dataset.lastScore || "0");
+
+            if (containsKeywords && isLongEnough) {
+                feedbackProblemSolving.textContent = "¡Excelente! Tu prompt es específico y relevante para el problema planteado. Has ganado " + PROBLEM_SOLVING_POINTS + " puntos.";
+                feedbackProblemSolving.className = 'feedback correct bg-green-100 text-green-800 border border-green-200';
+                
+                if (previousProblemSolvingScore === 0) { // Solo añadir puntos si no se han añadido antes
+                    currentModuleScore += PROBLEM_SOLVING_POINTS;
+                    problemSolvingActivity.dataset.lastScore = PROBLEM_SOLVING_POINTS.toString();
+                    updateScoreDisplay();
+                    showCustomModal("¡Has completado la Actividad 3 y obtenido " + PROBLEM_SOLVING_POINTS + " puntos!");
+                }
+                
+                submitProblemSolvingBtn.disabled = true;
+                problemSolvingPromptTextarea.disabled = true;
+                resetProblemSolvingBtn.disabled = false;
+            } else {
+                feedbackProblemSolving.textContent = 'Tu prompt necesita ser más detallado y contener palabras clave relacionadas con la ayuda de Gemini para resolver el problema de las fracciones. ¡Intenta de nuevo!';
+                feedbackProblemSolving.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+                showCustomModal("Tu prompt para la Actividad 3 necesita más detalles. Asegúrate de incluir palabras clave relevantes como 'Gemini', 'resolver', 'estrategia', 'fracciones'.");
+            }
+        }
+
+        function resetProblemSolving() {
+            let lastProblemSolvingScore = parseInt(problemSolvingActivity.dataset.lastScore || "0");
+            currentModuleScore -= lastProblemSolvingScore;
+            problemSolvingActivity.dataset.lastScore = "0";
+
+            problemSolvingPromptTextarea.value = '';
+            problemSolvingPromptTextarea.disabled = false;
+            feedbackProblemSolving.textContent = '';
+            feedbackProblemSolving.className = 'feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]';
+            
+            submitProblemSolvingBtn.disabled = false;
+            resetProblemSolvingBtn.disabled = true;
+            updateScoreDisplay();
+            showCustomModal('Actividad 3 reiniciada. ¡Puedes intentarlo de nuevo!');
+        }
+
+        // Lógica para la Actividad 4: Emparejamiento de Conceptos
+        function submitMatching() {
+            let correctMatches = 0;
+            let previousMatchingScore = parseInt(matchingActivity.dataset.lastScore || "0");
+
+            // Reset feedback classes
+            feedbackMatch1.className = 'feedback-match';
+            feedbackMatch2.className = 'feedback-match';
+            feedbackMatch3.className = 'feedback-match';
+
+            // Check match 1
+            if (match1Select.value === 'b') { // Superar el bloqueo creativo
+                correctMatches++;
+                feedbackMatch1.textContent = 'Correcto ✅';
+                feedbackMatch1.classList.add('correct');
+            } else {
+                feedbackMatch1.textContent = 'Incorrecto ❌';
+                feedbackMatch1.classList.add('incorrect');
+            }
+
+            // Check match 2
+            if (match2Select.value === 'a') { // Ahorrar tiempo en investigación
+                correctMatches++;
+                feedbackMatch2.textContent = 'Correcto ✅';
+                feedbackMatch2.classList.add('correct');
+            } else {
+                feedbackMatch2.textContent = 'Incorrecto ❌';
+                feedbackMatch2.classList.add('incorrect');
+            }
+
+            // Check match 3
+            if (match3Select.value === 'b') { // Atender la diversidad de niveles de aprendizaje
+                correctMatches++;
+                feedbackMatch3.textContent = 'Correcto ✅';
+                feedbackMatch3.classList.add('correct');
+            } else {
+                feedbackMatch3.textContent = 'Incorrecto ❌';
+                feedbackMatch3.classList.add('incorrect');
+            }
+
+            let currentAttemptScore = correctMatches * MATCHING_POINTS_PER_PAIR;
+
+            if (previousMatchingScore === 0) { // Solo añadir puntos si no se han añadido antes
+                currentModuleScore += currentAttemptScore;
+                matchingActivity.dataset.lastScore = currentAttemptScore.toString();
+                updateScoreDisplay();
+                showCustomModal(`Has completado la Actividad 4. Obtuviste ${currentAttemptScore} puntos de ${3 * MATCHING_POINTS_PER_PAIR} posibles.`);
+            } else {
+                showCustomModal(`Ya habías completado esta actividad. Tu puntuación fue de ${previousMatchingScore} puntos. Reinicia para volver a intentarlo.`);
+            }
+
+            // Disable selects and submit button, enable reset
+            match1Select.disabled = true;
+            match2Select.disabled = true;
+            match3Select.disabled = true;
+            submitMatchingBtn.disabled = true;
+            resetMatchingBtn.disabled = false;
+        }
+
+        function resetMatching() {
+            let lastMatchingScore = parseInt(matchingActivity.dataset.lastScore || "0");
+            currentModuleScore -= lastMatchingScore;
+            matchingActivity.dataset.lastScore = "0";
+
+            // Reset selects
+            match1Select.value = '';
+            match2Select.value = '';
+            match3Select.value = '';
+
+            // Enable selects
+            match1Select.disabled = false;
+            match2Select.disabled = false;
+            match3Select.disabled = false;
+
+            // Clear feedback
+            feedbackMatch1.textContent = '';
+            feedbackMatch1.className = 'feedback-match';
+            feedbackMatch2.textContent = '';
+            feedbackMatch2.className = 'feedback-match';
+            feedbackMatch3.textContent = '';
+            feedbackMatch3.className = 'feedback-match';
+            feedbackMatching.textContent = '';
+            feedbackMatching.className = 'feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]';
+
+            submitMatchingBtn.disabled = false;
+            resetMatchingBtn.disabled = true;
+            updateScoreDisplay();
+            showCustomModal('Actividad 4 reiniciada. ¡Puedes intentarlo de nuevo!');
+        }
+
+        // Lógica para la Actividad 5: Verdadero o Falso
+        function submitTrueFalse() {
+            let previousTrueFalseScore = parseInt(activityTrueFalse.dataset.lastScore || "0");
+            let scoreTfQ1 = 0;
+            let scoreTfQ2 = 0;
+            const answerTfQ1 = document.querySelector('input[name="tfQ1"]:checked');
+            const answerTfQ2 = document.querySelector('input[name="tfQ2"]:checked');
+            let tfQ1Attempted = false;
+            let tfQ2Attempted = false;
+
+            if (answerTfQ1) {
+                tfQ1Attempted = true;
+                if (answerTfQ1.value === 'false') {
+                    feedbackTfQ1.textContent = '¡Correcto! Gemini puede generar texto sin necesidad de una imagen de entrada.';
+                    feedbackTfQ1.className = 'feedback correct bg-green-100 text-green-800 border border-green-200';
+                    scoreTfQ1 = TRUE_FALSE_POINTS_PER_QUESTION;
+                } else {
+                    feedbackTfQ1.innerHTML = 'Incorrecto. Gemini es un modelo de lenguaje multimodal, pero su capacidad principal es la generación de texto a partir de prompts de texto. Revisa la <a href="#section1-1" class="text-blue-600 underline" onclick="hideCustomModal();">sección "¿Qué es Google Gemini?"</a>.';
+                    feedbackTfQ1.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+                }
+            } else {
+                feedbackTfQ1.textContent = 'Por favor, selecciona una respuesta para la pregunta 1.';
+                feedbackTfQ1.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+            }
+
+            if (answerTfQ2) {
+                tfQ2Attempted = true;
+                if (answerTfQ2.value === 'true') {
+                    feedbackTfQ2.textContent = '¡Correcto! La Fórmula del Prompt Básico es una guía esencial para prompts efectivos.';
+                    feedbackTfQ2.className = 'feedback correct bg-green-100 text-green-800 border border-green-200';
+                    scoreTfQ2 = TRUE_FALSE_POINTS_PER_QUESTION;
+                } else {
+                    feedbackTfQ2.innerHTML = 'Incorrecto. La Fórmula del Prompt Básico sí incluye esos elementos. Revisa la <a href="#section1-2" class="text-blue-600 underline" onclick="hideCustomModal();">sección "La Fórmula del Prompt Básico"</a>.';
+                    feedbackTfQ2.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+                }
+            } else {
+                feedbackTfQ2.textContent = 'Por favor, selecciona una respuesta para la pregunta 2.';
+                feedbackTfQ2.className = 'feedback incorrect bg-red-100 text-red-800 border border-red-200';
+            }
+
+            if (tfQ1Attempted && tfQ2Attempted) {
+                currentModuleScore -= previousTrueFalseScore;
+                let currentAttemptScore = scoreTfQ1 + scoreTfQ2;
+                currentModuleScore += currentAttemptScore;
+                activityTrueFalse.dataset.lastScore = currentAttemptScore.toString();
+                updateScoreDisplay();
+
+                if (currentAttemptScore === (TRUE_FALSE_POINTS_PER_QUESTION * 2)) {
+                    showCustomModal("¡Excelente! Ambas respuestas de Verdadero/Falso son correctas. Has obtenido " + currentAttemptScore + " puntos.");
+                } else if (currentAttemptScore > 0) {
+                    showCustomModal("¡Bien hecho en la actividad de Verdadero/Falso! Has obtenido " + currentAttemptScore + " puntos en este intento.");
+                } else {
+                    showCustomModal("Algunas respuestas no fueron correctas. ¡Puedes reiniciar e intentarlo de nuevo!");
+                }
+
+                tfQ1Radios.forEach(input => input.disabled = true);
+                tfQ2Radios.forEach(input => input.disabled = true);
+                submitTrueFalseBtn.disabled = true;
+                resetTrueFalseBtn.disabled = false;
+            }
+        }
+
+        function resetTrueFalse() {
+            let lastTrueFalseScore = parseInt(activityTrueFalse.dataset.lastScore || "0");
+            currentModuleScore -= lastTrueFalseScore;
+            activityTrueFalse.dataset.lastScore = "0";
+
+            tfQ1Radios.forEach(radio => { radio.checked = false; radio.disabled = false; });
+            tfQ2Radios.forEach(radio => { radio.checked = false; radio.disabled = false; });
+
+            feedbackTfQ1.textContent = '';
+            feedbackTfQ1.className = 'feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]';
+            feedbackTfQ2.textContent = '';
+            feedbackTfQ2.className = 'feedback p-3 mt-3 rounded-md font-bold min-h-[1.5em]';
+
+            submitTrueFalseBtn.disabled = false;
+            resetTrueFalseBtn.disabled = true;
+
+            updateScoreDisplay();
+            showCustomModal('Actividad Verdadero/Falso reiniciada. ¡Puedes intentarlo de nuevo!');
+        }
+
+        // Función para actualizar la visualización de la puntuación total del módulo
+        function updateScoreDisplay() {
+            if (currentModuleScore < 0) currentModuleScore = 0; // Asegurar que la puntuación no sea negativa
+            const scoreElement = document.getElementById('moduleScore');
+            scoreElement.textContent = `Puntuación del Módulo: ${currentModuleScore} puntos`;
+        }
+        
+        // Funciones de navegación (ejemplos con modal)
+        function goToMainMenu() { 
+            showCustomModal("Navegando al menú principal de módulos... (funcionalidad pendiente)");
+        }
+        function goToNextModule() { 
+            showCustomModal("Navegando al Módulo 2... (Próximamente)");
+        }
+    </script>
+</body>
+</html>
+
