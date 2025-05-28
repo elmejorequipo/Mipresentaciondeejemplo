@@ -1,0 +1,1252 @@
+<immersive id="mooc-razones-trigonometricas" title="Módulo: Razones Trigonométricas">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo: Razones Trigonométricas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .custom-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Estilos para el video de YouTube */
+        .video-responsive {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+        }
+
+        .video-responsive iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Estilos para el scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Estilos para ocultar y revelar elementos */
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        /* Animación para el efecto de "revelar al hacer scroll" */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .reveal-on-scroll.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Estilos para el botón "Volver Arriba" */
+        #backToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        #backToTopBtn:hover {
+            background-color: #4338ca;
+        }
+
+        /* Estilos para la barra de progreso */
+        #progressBarContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            z-index: 1000;
+        }
+
+        #progressBar {
+            height: 100%;
+            width: 0%;
+            background-color: #10b981;
+            transition: width 0.1s linear;
+        }
+
+        /* Estilos para el modal personalizado */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .custom-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .custom-modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .custom-modal-overlay.show .custom-modal-content {
+            transform: translateY(0);
+        }
+
+        .custom-modal-content h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .custom-modal-content p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .custom-modal-content button {
+            background-color: #4f46e5;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-modal-content button:hover {
+            background-color: #4338ca;
+        }
+
+        /* Estilos para actividades completadas */
+        .completed-activity {
+            border-left: 8px solid #10b981 !important;
+            background-color: #ecfdf5 !important;
+        }
+
+        .completed-section {
+            background-color: #e0f2fe !important;
+            border-left: 8px solid #2563eb !important;
+        }
+
+        .mark-as-read-btn {
+            background-color: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .mark-as-read-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .mark-as-read-btn.completed {
+            background-color: #10b981;
+            cursor: default;
+        }
+
+        .mark-as-read-btn.completed:hover {
+            background-color: #10b981;
+        }
+
+        /* Estilos para las tarjetas de icono */
+        .icon-card {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-card .icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            margin-right: 1rem;
+            background-color: #bfdbfe; /* Light blue */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1e40af; /* Darker blue */
+            font-size: 1.5rem;
+        }
+
+        .icon-card .content h3 {
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.25rem;
+        }
+
+        .icon-card .content p {
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+
+        .scheme-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-left: 6px solid #3b82f6;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 0.95rem;
+            color: #1f2937;
+            overflow-x: auto;
+            white-space: pre-wrap; /* Permite que el texto se ajuste dentro de la caja */
+            word-break: break-all; /* Rompe palabras largas si es necesario */
+        }
+
+        .scheme-box pre {
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: none;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            white-space: pre-wrap; /* Para preservar los espacios y saltos de línea */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="progressBarContainer">
+        <div id="progressBar"></div>
+    </div>
+
+    <div id="customModal" class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <h3 id="modalTitle"></h3>
+            <p id="modalMessage"></p>
+            <button id="modalCloseBtn">Entendido</button>
+        </div>
+    </div>
+
+    <button id="backToTopBtn" title="Volver Arriba">↑</button>
+
+    <div id="coverPage" class="fixed inset-0 bg-gradient-to-br from-blue-600 to-indigo-800 text-white flex flex-col items-center justify-center p-6 text-center z-50">
+        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Miniatura del video de YouTube" class="w-32 h-auto mb-6 rounded-lg shadow-lg">
+        <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight">Módulo: Razones Trigonométricas</h1>
+        <p class="text-xl sm:text-2xl mb-8 opacity-90">Explora los conceptos fundamentales de las razones trigonométricas, su aplicación y cómo resolver problemas con ellas.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div class="flex items-center text-lg sm:text-xl bg-white bg-opacity-20 px-4 py-2 rounded-full">
+                <span class="mr-2">👨‍🏫</span> Dr. Pitágoras
+            </div>
+            <div class="flex items-center text-lg sm:text-xl bg-white bg-opacity-20 px-4 py-2 rounded-full">
+                <span class="mr-2">📚</span> Matemáticas
+            </div>
+        </div>
+        <button id="startModuleBtn" class="mt-12 bg-white text-blue-700 hover:bg-gray-100 px-10 py-4 rounded-full text-xl font-bold shadow-lg transform transition duration-300 hover:scale-105">
+            Comenzar Módulo
+        </button>
+    </div>
+
+    <div id="moduleContent" class="hidden module-container custom-container py-10">
+        <header class="bg-white rounded-xl shadow-lg p-8 mb-8 reveal-on-scroll">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Módulo: Razones Trigonométricas</h2>
+            <p class="text-gray-600 text-lg mb-6">Explora los conceptos fundamentales de las razones trigonométricas, su aplicación y cómo resolver problemas con ellas.</p>
+            <div class="flex items-center text-gray-700 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="font-semibold">Profesor:</span> Dr. Pitágoras
+            </div>
+            <div class="flex items-center text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" />
+                </svg>
+                <span class="font-semibold">Asignatura:</span> Matemáticas
+            </div>
+        </header>
+
+        <section class="bg-white rounded-xl shadow-lg p-6 mb-8 reveal-on-scroll">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Video Introductorio</h3>
+            <div class="video-responsive">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg p-6 mb-8 reveal-on-scroll">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Objetivos de Aprendizaje</h3>
+            <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Identificar y definir las seis razones trigonométricas.</span>
+                </li>
+                <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Calcular las razones trigonométricas para ángulos agudos en triángulos rectángulos.</span>
+                </li>
+                <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Resolver problemas prácticos utilizando las razones trigonométricas.</span>
+                </li>
+            </ul>
+        </section>
+
+        <section id="section1-1" class="module-section bg-white rounded-xl shadow-lg p-6 mb-8 reveal-on-scroll" data-section-id="section1-1">
+            <h3 class="text-3xl font-bold text-blue-700 mb-4 border-b-2 pb-2 border-blue-300">Introducción a las Razones Trigonométricas</h3>
+            <p class="text-gray-700 mb-4">Las razones trigonométricas son relaciones entre los lados de un triángulo rectángulo y los ángulos agudos. Son fundamentales para el estudio de la trigonometría y tienen aplicaciones en diversas áreas como la física, la ingeniería y la astronomía.</p>
+            <p class="text-gray-700 mb-4">Para entenderlas, es crucial recordar las partes de un triángulo rectángulo: la hipotenusa (el lado opuesto al ángulo recto), el cateto opuesto (el lado opuesto al ángulo agudo de referencia) y el cateto adyacente (el lado contiguo al ángulo agudo de referencia).</p>
+            <img src="https://images.pexels.com/photos/4031633/pexels-photo-4031633.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" alt="Triángulo rectángulo con sus lados etiquetados." class="w-full h-auto rounded-lg my-6 shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Imagen+no+disponible';">
+            <h3 class="text-blue-700 mt-8 text-xl font-semibold border-b border-blue-300 pb-2 mb-4 sm:text-lg">Conceptos Clave del Triángulo Rectángulo</h3>
+            <div class="scheme-box">
+                <pre> Hipotenusa: Lado opuesto al ángulo recto (siempre el más largo).
+ Cateto Opuesto: Lado opuesto al ángulo agudo de referencia.
+ Cateto Adyacente: Lado contiguo al ángulo agudo de referencia.
+            </pre>
+            </div>
+            <div class="mt-5 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-600 shadow-sm">
+                <p class="font-semibold text-blue-800 mb-2">🤔 Reflexión:</p>
+                <p class="text-base">¿Dónde crees que podrías ver la aplicación de un triángulo rectángulo en tu vida diaria o en tu entorno?</p>
+            </div>
+            <button class="mark-as-read-btn" data-section-id="section1-1" onclick="markSectionAsRead(this)">Marcar como leído</button>
+        </section>
+
+        <section id="section1-2" class="module-section bg-white rounded-xl shadow-lg p-6 mb-8 reveal-on-scroll" data-section-id="section1-2">
+            <h3 class="text-3xl font-bold text-blue-700 mb-4 border-b-2 pb-2 border-blue-300">Las Seis Razones Trigonométricas Fundamentales</h3>
+            <p class="text-gray-700 mb-4">Existen seis razones trigonométricas principales, cada una definida por la relación entre dos lados de un triángulo rectángulo con respecto a un ángulo agudo específico (generalmente denotado por $\theta$ o $\alpha$).</p>
+            <p class="text-gray-700 mb-4">Las tres razones básicas son seno, coseno y tangente. Sus inversas son cosecante, secante y cotangente.</p>
+            <img src="https://images.pexels.com/photos/386009/pexels-photo-386009.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" alt="Fórmulas de las razones trigonométricas." class="w-full h-auto rounded-lg my-6 shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Imagen+no+disponible';">
+            <h3 class="text-blue-700 mt-8 text-xl font-semibold border-b border-blue-300 pb-2 mb-4 sm:text-lg">Definiciones Clave</h3>
+            <div class="scheme-box">
+                <pre> Seno (sin $\theta$) = Cateto Opuesto / Hipotenusa
+ Coseno (cos $\theta$) = Cateto Adyacente / Hipotenusa
+ Tangente (tan $\theta$) = Cateto Opuesto / Cateto Adyacente
+
+ Cosecante (csc $\theta$) = 1 / sin $\theta$ = Hipotenusa / Cateto Opuesto
+ Secante (sec $\theta$) = 1 / cos $\theta$ = Hipotenusa / Cateto Adyacente
+ Cotangente (cot $\theta$) = 1 / tan $\theta$ = Cateto Adyacente / Cateto Opuesto
+            </pre>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                <div class="icon-card">
+                    <div class="icon bg-blue-200 text-blue-800">💡</div>
+                    <div class="content">
+                        <h3>Mnemotécnicas para Recordar</h3>
+                        <p class="text-sm text-gray-600">Una forma común de recordar las primeras tres razones es con el acrónimo <strong class='text-blue-900 font-bold'>SOH CAH TOA</strong>: Seno = Opuesto/Hipotenusa, Coseno = Adyacente/Hipotenusa, Tangente = Opuesto/Adyacente.</p>
+                    </div>
+                </div>
+                <div class="icon-card">
+                    <div class="icon bg-green-200 text-green-800">📐</div>
+                    <div class="content">
+                        <h3>Relación con el Teorema de Pitágoras</h3>
+                        <p class="text-sm text-gray-600">Las razones trigonométricas complementan el Teorema de Pitágoras. Mientras Pitágoras relaciona las longitudes de los lados, la trigonometría relaciona lados y ángulos.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-600 shadow-sm">
+                <p class="font-semibold text-blue-800 mb-2">🤔 Reflexión:</p>
+                <p class="text-base">¿Cómo crees que el conocimiento de estas relaciones puede ser útil para resolver problemas en la vida real, como medir alturas o distancias?</p>
+            </div>
+            <button class="mark-as-read-btn" data-section-id="section1-2" onclick="markSectionAsRead(this)">Marcar como leído</button>
+        </section>
+
+        <section id="activities" class="bg-white rounded-xl shadow-lg p-6 mb-8 reveal-on-scroll">
+            <h3 class="text-3xl font-bold text-gray-800 mb-6">Actividades Interactivas</h3>
+
+            <div id="quizActivity" class="interactive-activity bg-gray-50 p-6 rounded-lg shadow-md mb-6 transition-all duration-300 ease-in-out">
+                <h4 class="text-2xl font-semibold text-gray-800 mb-4">Cuestionario: Conceptos Clave</h4>
+                <p class="text-gray-600 mb-4">Responde las siguientes preguntas sobre conceptos clave.</p>
+                <div class="space-y-4">
+                    <div class="mb-4">
+                        <p class="font-medium text-gray-700 mb-2">1. ¿Cuál es el lado opuesto al ángulo recto en un triángulo rectángulo?</p>
+                        <div class="flex flex-col space-y-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="q1" value="a">
+                                <span class="ml-2 text-gray-700">a) Cateto Adyacente</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="q1" value="b">
+                                <span class="ml-2 text-gray-700">b) Cateto Opuesto</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="q1" value="c">
+                                <span class="ml-2 text-gray-700">c) Hipotenusa</span>
+                            </label>
+                        </div>
+                        <div id="feedback-q1" class="mt-2 text-sm"></div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="font-medium text-gray-700 mb-2">2. ¿Qué razón trigonométrica relaciona el cateto opuesto con la hipotenusa?</p>
+                        <div class="flex flex-col space-y-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="q2" value="a">
+                                <span class="ml-2 text-gray-700">a) Coseno</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="q2" value="b">
+                                <span class="ml-2 text-gray-700">b) Seno</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="q2" value="c">
+                                <span class="ml-2 text-gray-700">c) Tangente</span>
+                            </label>
+                        </div>
+                        <div id="feedback-q2" class="mt-2 text-sm"></div>
+                    </div>
+                </div>
+                <button id="submitQuiz" class="mt-6 bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Verificar Respuestas</button>
+                <button id="resetQuizBtn" class="mt-6 bg-gray-400 text-white px-5 py-2 rounded-lg hover:bg-gray-500 transition duration-200 ml-2">Reiniciar</button>
+            </div>
+
+            <div id="exerciseActivity" class="interactive-activity bg-gray-50 p-6 rounded-lg shadow-md mb-6 transition-all duration-300 ease-in-out">
+                <h4 class="text-2xl font-semibold text-gray-800 mb-4">Ejercicio: Aplicación de Razones Trigonométricas</h4>
+                <p class="text-gray-600 mb-4">Imagina que necesitas ideas para un proyecto sobre la <strong class='text-blue-900 font-bold'>medición de alturas inaccesibles</strong> (como un edificio o un árbol) utilizando razones trigonométricas para tus alumnos de secundaria. Escribe un prompt sencillo pero efectivo que le harías a un asistente de IA:</p>
+                <textarea id="exercisePrompt" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Ej: 'Asistente, dame 3 ideas de proyectos para medir alturas con trigonometría para alumnos de 15 años...'"></textarea>
+                <div class="mt-2 text-sm text-gray-500">Mínimo 50 caracteres. Incluye las palabras clave: ideas, medición, alturas.</div>
+                <div class="flex items-center mt-4">
+                    <button id="submitExercise" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Evaluar Prompt</button>
+                    <button id="awardExercisePointsBtn" class="ml-2 bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition duration-200 hidden">Auto-Evaluar (Gana Puntos)</button>
+                    <button id="resetExerciseBtn" class="ml-2 bg-gray-400 text-white px-5 py-2 rounded-lg hover:bg-gray-500 transition duration-200">Reiniciar</button>
+                </div>
+                <div id="exerciseFeedback" class="mt-4 text-sm"></div>
+            </div>
+
+            <div id="problemSolvingActivity" class="interactive-activity bg-gray-50 p-6 rounded-lg shadow-md mb-6 transition-all duration-300 ease-in-out">
+                <h4 class="text-2xl font-semibold text-gray-800 mb-4">Resolución de Problemas: Enseñar Ángulos de Elevación/Depresión</h4>
+                <p class="text-gray-600 mb-4">Imagina que tus alumnos de 14 años tienen dificultades para entender el concepto de <strong class='text-blue-900'>ángulos de elevación y depresión</strong> y se aburren con las explicaciones teóricas. Escribe un prompt que le harías a un asistente de IA para crear una estrategia innovadora y divertida para enseñar este concepto a este grupo.</p>
+                <textarea id="problemSolvingPrompt" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Ej: 'Actúa como un experto en pedagogía matemática. Necesito 3 ideas de actividades lúdicas para enseñar ángulos de elevación y depresión a adolescentes de 14 años...'"></textarea>
+                <div class="mt-2 text-sm text-gray-500">Mínimo 70 caracteres. Incluye las palabras clave: estrategia, divertida, experimentos.</div>
+                <div class="flex items-center mt-4">
+                    <button id="submitProblemSolving" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Evaluar Prompt</button>
+                    <button id="resetProblemSolvingBtn" class="ml-2 bg-gray-400 text-white px-5 py-2 rounded-lg hover:bg-gray-500 transition duration-200">Reiniciar</button>
+                </div>
+                <div id="problemSolvingFeedback" class="mt-4 text-sm"></div>
+            </div>
+
+            <div id="matchingActivity" class="interactive-activity bg-gray-50 p-6 rounded-lg shadow-md mb-6 transition-all duration-300 ease-in-out">
+                <h4 class="text-2xl font-semibold text-gray-800 mb-4">Emparejamiento: Razón Trigonométrica y Definición</h4>
+                <p class="text-gray-600 mb-4">Empareja cada razón trigonométrica con su característica principal.</p>
+                <div class="space-y-4">
+                    <div class="flex flex-col md:flex-row items-start md:items-center mb-4">
+                        <span class="font-medium text-gray-700 md:w-1/3 mb-2 md:mb-0">Seno:</span>
+                        <div class="flex flex-wrap gap-2 md:w-2/3">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="match1" value="a">
+                                <span class="ml-2 text-gray-700">Cateto Adyacente / Hipotenusa</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="match1" value="b">
+                                <span class="ml-2 text-gray-700">Cateto Opuesto / Hipotenusa</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="match1" value="c">
+                                <span class="ml-2 text-gray-700">Cateto Opuesto / Cateto Adyacente</span>
+                            </label>
+                        </div>
+                        <span id="feedback-match1" class="ml-auto text-sm font-semibold"></span>
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center mb-4">
+                        <span class="font-medium text-gray-700 md:w-1/3 mb-2 md:mb-0">Tangente:</span>
+                        <div class="flex flex-wrap gap-2 md:w-2/3">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="match2" value="a">
+                                <span class="ml-2 text-gray-700">Cateto Adyacente / Hipotenusa</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="match2" value="b">
+                                <span class="ml-2 text-gray-700">Cateto Opuesto / Hipotenusa</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="match2" value="c">
+                                <span class="ml-2 text-gray-700">Cateto Opuesto / Cateto Adyacente</span>
+                            </label>
+                        </div>
+                        <span id="feedback-match2" class="ml-auto text-sm font-semibold"></span>
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center mb-4">
+                        <span class="font-medium text-gray-700 md:w-1/3 mb-2 md:mb-0">Coseno:</span>
+                        <div class="flex flex-wrap gap-2 md:w-2/3">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="match3" value="a">
+                                <span class="ml-2 text-gray-700">Cateto Adyacente / Hipotenusa</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="match3" value="b">
+                                <span class="ml-2 text-gray-700">Cateto Opuesto / Hipotenusa</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="match3" value="c">
+                                <span class="ml-2 text-gray-700">Cateto Opuesto / Cateto Adyacente</span>
+                            </label>
+                        </div>
+                        <span id="feedback-match3" class="ml-auto text-sm font-semibold"></span>
+                    </div>
+                </div>
+                <button id="submitMatching" class="mt-6 bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Verificar Emparejamientos</button>
+                <button id="resetMatchingBtn" class="mt-6 bg-gray-400 text-white px-5 py-2 rounded-lg hover:bg-gray-500 transition duration-200 ml-2">Reiniciar</button>
+            </div>
+
+            <div id="activityTrueFalse" class="interactive-activity bg-gray-50 p-6 rounded-lg shadow-md mb-6 transition-all duration-300 ease-in-out">
+                <h4 class="text-2xl font-semibold text-gray-800 mb-4">Verdadero/Falso</h4>
+                <p class="text-gray-600 mb-4">Indica si las siguientes afirmaciones sobre razones trigonométricas son Verdaderas o Falsas.</p>
+                <div class="space-y-4">
+                    <div class="mb-4">
+                        <p class="font-medium text-gray-700 mb-2">1. La cotangente es el recíproco de la tangente.</p>
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="tf1" value="true">
+                                <span class="ml-2 text-gray-700">Verdadero</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="tf1" value="false">
+                                <span class="ml-2 text-gray-700">Falso</span>
+                            </label>
+                        </div>
+                        <div id="feedback-tf1" class="mt-2 text-sm"></div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="font-medium text-gray-700 mb-2">2. El valor de la hipotenusa puede ser menor que el de un cateto.</p>
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="tf2" value="true">
+                                <span class="ml-2 text-gray-700">Verdadero</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio text-blue-600" name="tf2" value="false">
+                                <span class="ml-2 text-gray-700">Falso</span>
+                            </label>
+                        </div>
+                        <div id="feedback-tf2" class="mt-2 text-sm"></div>
+                    </div>
+                </div>
+                <button id="submitTrueFalse" class="mt-6 bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Verificar Respuestas</button>
+                <button id="resetTrueFalseBtn" class="mt-6 bg-gray-400 text-white px-5 py-2 rounded-lg hover:bg-gray-500 transition duration-200 ml-2">Reiniciar</button>
+            </div>
+        </section>
+
+        <section id="summary" class="bg-white rounded-xl shadow-lg p-6 mb-8 reveal-on-scroll">
+            <h3 class="text-3xl font-bold text-gray-800 mb-4">Resumen del Módulo: Razones Trigonométricas</h3>
+            <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                <li>Las razones trigonométricas son relaciones entre los lados y ángulos de un triángulo rectángulo.</li>
+                <li>Las seis razones principales son seno, coseno, tangente, cosecante, secante y cotangente.</li>
+                <li>Estas razones son fundamentales para resolver problemas de medición indirecta de alturas y distancias.</li>
+            </ul>
+            <p class="text-gray-600 italic mt-4">¡La trigonometría es una herramienta poderosa para entender el mundo que nos rodea!</p>
+        </section>
+
+        <section id="conclusion" class="bg-white rounded-xl shadow-lg p-6 mb-8 reveal-on-scroll">
+            <h3 class="text-3xl font-bold text-gray-800 mb-4">Conclusión y Próximos Pasos en la Trigonometría</h3>
+            <p class="text-gray-700 mb-4">¡Felicidades por completar este módulo introductorio a las razones trigonométricas! Has adquirido una base sólida para explorar aplicaciones más avanzadas en matemáticas y ciencias.</p>
+            <p class="text-gray-700 font-semibold text-lg">¡Tu curiosidad es la clave para dominar los misterios de la trigonometría!</p>
+        </section>
+
+        <section id="bibliography" class="bg-white rounded-xl shadow-lg p-6 mb-8 reveal-on-scroll">
+            <h3 class="text-3xl font-bold text-gray-800 mb-4">Recursos Adicionales</h3>
+            <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                <li><a href="https://www.profesorenlinea.cl/matematica/Razones_trigonometricas.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Profesor en Línea: Razones Trigonométricas</a></li>
+                <li><a href="https://es.khanacademy.org/math/geometry/right-triangles-trig" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Khan Academy: Trigonometría del triángulo rectángulo</a></li>
+                <li><a href="https://www.geogebra.org/m/XgE9mJ23" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">GeoGebra: Razones Trigonométricas Interactivas</a></li>
+            </ul>
+        </section>
+    </div>
+
+    <script>
+        const moduleData = {
+            "moduleInfo": {
+                "title": "Fundamentos de la Astronomía",
+                "description": "Explora los conceptos básicos del universo, desde planetas hasta galaxias, y cómo los observamos.",
+                "professorName": "Dr. Elara Cosmos",
+                "subjectName": "Ciencias del Espacio",
+                "youtubeVideoId": "dQw4w9WgXcQ",
+                "youtubeThumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg"
+            },
+            "learningObjectives": [
+                "Comprender la composición del sistema solar.",
+                "Identificar los tipos principales de cuerpos celestes.",
+                "Explicar el concepto de la expansión del universo."
+            ],
+            "sections": [
+                {
+                    "id": "section1-1",
+                    "title": "Introducción a las Razones Trigonométricas",
+                    "contentParagraphs": [
+                        "Las razones trigonométricas son relaciones entre los lados de un triángulo rectángulo y los ángulos agudos. Son fundamentales para el estudio de la trigonometría y tienen aplicaciones en diversas áreas como la física, la ingeniería y la astronomía.",
+                        "Para entenderlas, es crucial recordar las partes de un triángulo rectángulo: la hipotenusa (el lado opuesto al ángulo recto), el cateto opuesto (el lado opuesto al ángulo agudo de referencia) y el cateto adyacente (el lado contiguo al ángulo agudo de referencia)."
+                    ],
+                    "image": {
+                        "url": "https://images.pexels.com/photos/4031633/pexels-photo-4031633.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+                        "altText": "Un telescopio apuntando al cielo nocturno estrellado."
+                    },
+                    "codeBlock": "Hipotenusa: Lado opuesto al ángulo recto (siempre el más largo).\n Cateto Opuesto: Lado opuesto al ángulo opuesto al ángulo agudo de referencia.\n Cateto Adyacente: Lado contiguo al ángulo agudo de referencia.",
+                    "reflectionQuestion": "¿Dónde crees que podrías ver la aplicación de un triángulo rectángulo en tu vida diaria o en tu entorno?",
+                    "iconListItems": null
+                },
+                {
+                    "id": "section1-2",
+                    "title": "Las Seis Razones Trigonométricas Fundamentales",
+                    "contentParagraphs": [
+                        "Existen seis razones trigonométricas principales, cada una definida por la relación entre dos lados de un triángulo rectángulo con respecto a un ángulo agudo específico (generalmente denotado por $\\theta$ o $\\alpha$).",
+                        "Las tres razones básicas son seno, coseno y tangente. Sus inversas son cosecante, secante y cotangente."
+                    ],
+                    "image": {
+                        "url": "https://images.pexels.com/photos/386009/pexels-photo-386009.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+                        "altText": "Representación artística del sistema solar con planetas orbitando el Sol."
+                    },
+                    "codeBlock": "Seno (sin $\\theta$) = Cateto Opuesto / Hipotenusa\n Coseno (cos $\\theta$) = Cateto Adyacente / Hipotenusa\n Tangente (tan $\\theta$) = Cateto Opuesto / Cateto Adyacente\n\n Cosecante (csc $\\theta$) = 1 / sin $\\theta$ = Hipotenusa / Cateto Opuesto\n Secante (sec $\\theta$) = 1 / cos $\\theta$ = Hipotenusa / Cateto Adyacente\n Cotangente (cot $\\theta$) = 1 / tan $\\theta$ = Cateto Adyacente / Cateto Opuesto",
+                    "reflectionQuestion": "¿Cómo crees que el conocimiento de estas relaciones puede ser útil para resolver problemas en la vida real, como medir alturas o distancias?",
+                    "iconListItems": [
+                        {"iconClass": "💡", "heading": "Mnemotécnicas para Recordar", "description": "Una forma común de recordar las primeras tres razones es con el acrónimo <strong class='text-blue-900 font-bold'>SOH CAH TOA</strong>: Seno = Opuesto/Hipotenusa, Coseno = Adyacente/Hipotenusa, Tangente = Opuesto/Adyacente.", "useCase": null},
+                        {"iconClass": "📐", "heading": "Relación con el Teorema de Pitágoras", "description": "Las razones trigonométricas complementan el Teorema de Pitágoras. Mientras Pitágoras relaciona las longitudes de los lados, la trigonometría relaciona lados y ángulos.", "useCase": null}
+                    ]
+                }
+            ],
+            "activities": {
+                "quiz": {
+                    "instruction": "Responde las siguientes preguntas sobre conceptos clave.",
+                    "questions": [
+                        {
+                            "text": "¿Cuál es el lado opuesto al ángulo recto en un triángulo rectángulo?",
+                            "options": ["a) Cateto Adyacente", "b) Cateto Opuesto", "c) Hipotenusa"],
+                            "correctValue": "c",
+                            "feedbackCorrect": "¡Correcto! La hipotenusa es siempre el lado más largo y opuesto al ángulo recto.",
+                            "feedbackIncorrect": "Incorrecto. Revisa la sección 'Introducción a las Razones Trigonométricas' para más detalles."
+                        },
+                        {
+                            "text": "¿Qué razón trigonométrica relaciona el cateto opuesto con la hipotenusa?",
+                            "options": ["a) Coseno", "b) Seno", "c) Tangente"],
+                            "correctValue": "b",
+                            "feedbackCorrect": "¡Correcto! El seno de un ángulo es la razón entre el cateto opuesto y la hipotenusa.",
+                            "feedbackIncorrect": "Incorrecto. Revisa la sección 'Las Seis Razones Trigonométricas Fundamentales'."
+                        }
+                    ]
+                },
+                "exercise": {
+                    "instruction": "Imagina que necesitas ideas para un proyecto sobre la <strong class='text-blue-900 font-bold'>medición de alturas inaccesibles</strong> (como un edificio o un árbol) utilizando razones trigonométricas para tus alumnos de secundaria. Escribe un prompt sencillo pero efectivo que le harías a un asistente de IA:",
+                    "placeholder": "Ej: 'Asistente, dame 3 ideas de proyectos para medir alturas con trigonometría para alumnos de 15 años...'",
+                    "keywords": ["ideas", "medición", "alturas"],
+                    "minLength": 50
+                },
+                "problemSolving": {
+                    "instruction": "Imagina que tus alumnos de 14 años tienen dificultades para entender el concepto de <strong class='text-blue-900'>ángulos de elevación y depresión</strong> y se aburren con las explicaciones teóricas. Escribe un prompt que le harías a un asistente de IA para crear una estrategia innovadora y divertida para enseñar este concepto a este grupo.",
+                    "placeholder": "Ej: 'Actúa como un experto en pedagogía matemática. Necesito 3 ideas de actividades lúdicas para enseñar ángulos de elevación y depresión a adolescentes de 14 años...'",
+                    "keywords": ["estrategia", "divertida", "experimentos"],
+                    "minLength": 70
+                },
+                "matching": {
+                    "instruction": "Empareja cada razón trigonométrica con su característica principal.",
+                    "pairs": [
+                        {"concept": "Seno", "options": [{"value": "a", "text": "Cateto Adyacente / Hipotenusa"}, {"value": "b", "text": "Cateto Opuesto / Hipotenusa"}, {"value": "c", "text": "Cateto Opuesto / Cateto Adyacente"}], "correctValue": "b", "feedbackCorrect": "Correcto ✅", "feedbackIncorrect": "Incorrecto ❌"},
+                        {"concept": "Tangente", "options": [{"value": "a", "text": "Cateto Adyacente / Hipotenusa"}, {"value": "b", "text": "Cateto Opuesto / Hipotenusa"}, {"value": "c", "text": "Cateto Opuesto / Cateto Adyacente"}], "correctValue": "c", "feedbackCorrect": "Correcto ✅", "feedbackIncorrect": "Incorrecto ❌"},
+                        {"concept": "Coseno", "options": [{"value": "a", "text": "Cateto Adyacente / Hipotenusa"}, {"value": "b", "text": "Cateto Opuesto / Hipotenusa"}, {"value": "c", "text": "Cateto Opuesto / Cateto Adyacente"}], "correctValue": "a", "feedbackCorrect": "Correcto ✅", "feedbackIncorrect": "Incorrecto ❌"}
+                    ]
+                },
+                "trueFalse": {
+                    "instruction": "Indica si las siguientes afirmaciones sobre razones trigonométricas son Verdaderas o Falsas.",
+                    "questions": [
+                        {
+                            "text": "La cotangente es el recíproco de la tangente.",
+                            "correctValue": "true",
+                            "feedbackCorrect": "¡Correcto! La cotangente es 1/tan(θ).",
+                            "feedbackIncorrect": "Incorrecto. La cotangente es el recíproco de la tangente. Revisa la sección 'Las Seis Razones Trigonométricas Fundamentales'."
+                        },
+                        {
+                            "text": "El valor de la hipotenusa puede ser menor que el de un cateto.",
+                            "correctValue": "false",
+                            "feedbackCorrect": "¡Correcto! La hipotenusa es siempre el lado más largo en un triángulo rectángulo.",
+                            "feedbackIncorrect": "Incorrecto. La hipotenusa es el lado más largo de un triángulo rectángulo. Revisa la sección 'Introducción a las Razones Trigonométricas'."
+                        }
+                    ]
+                }
+            },
+            "summary": {
+                "title": "Resumen del Módulo: Razones Trigonométricas",
+                "contentPoints": [
+                    "Las razones trigonométricas son relaciones entre los lados y ángulos de un triángulo rectángulo.",
+                    "Las seis razones principales son seno, coseno, tangente, cosecante, secante y cotangente.",
+                    "Estas razones son fundamentales para resolver problemas de medición indirecta de alturas y distancias."
+                ],
+                "closingRemark": "¡La trigonometría es una herramienta poderosa para entender el mundo que nos rodea!"
+            },
+            "conclusion": {
+                "title": "Conclusión y Próximos Pasos en la Trigonometría",
+                "message": "¡Felicidades por completar este módulo introductorio a las razones trigonométricas! Has adquirido una base sólida para explorar aplicaciones más avanzadas en matemáticas y ciencias.",
+                "callToAction": "¡Tu curiosidad es la clave para dominar los misterios de la trigonometría!"
+            },
+            "bibliography": [
+                {"text": "Profesor en Línea: Razones Trigonométricas", "url": "https://www.profesorenlinea.cl/matematica/Razones_trigonometricas.html"},
+                {"text": "Khan Academy: Trigonometría del triángulo rectángulo", "url": "https://es.khanacademy.org/math/geometry/right-triangles-trig"},
+                {"text": "GeoGebra: Razones Trigonométricas Interactivas", "url": "https://www.geogebra.org/m/XgE9mJ23"}
+            ]
+        };
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const startModuleBtn = document.getElementById('startModuleBtn');
+            const coverPage = document.getElementById('coverPage');
+            const moduleContent = document.getElementById('moduleContent');
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            const progressBar = document.getElementById('progressBar');
+            const sections = document.querySelectorAll('.module-section');
+            const interactiveActivities = document.querySelectorAll('.interactive-activity');
+            const totalSections = sections.length;
+            let completedSections = new Set();
+            let totalActivityPoints = 0;
+            let earnedActivityPoints = 0;
+
+            const customModal = document.getElementById('customModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+            function showModal(title, message) {
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+                customModal.classList.add('show');
+            }
+
+            modalCloseBtn.addEventListener('click', () => {
+                customModal.classList.remove('show');
+            });
+
+
+            // Smooth scroll for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Back to top button logic
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.style.display = 'block';
+                } else {
+                    backToTopBtn.style.display = 'none';
+                }
+                updateProgressBar();
+            });
+
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Update progress bar based on scroll
+            function updateProgressBar() {
+                const {
+                    scrollTop,
+                    scrollHeight,
+                    clientHeight
+                } = document.documentElement;
+                const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
+                progressBar.style.width = `${scrollPercent}%`;
+            }
+
+            // Reveal on scroll animation
+            const elementsToReveal = document.querySelectorAll('.reveal-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            elementsToReveal.forEach(el => observer.observe(el));
+
+            // Function to mark sections as read
+            window.markSectionAsRead = (button) => {
+                const sectionId = button.dataset.sectionId;
+                const section = document.getElementById(sectionId);
+                if (section && !completedSections.has(sectionId)) {
+                    completedSections.add(sectionId);
+                    section.classList.add('completed-section');
+                    button.classList.add('completed');
+                    button.textContent = 'Leído';
+                    button.disabled = true;
+                    updateModuleProgress();
+                }
+            };
+
+            // Function to update module progress
+            function updateModuleProgress() {
+                const progressPercentage = (completedSections.size / totalSections) * 100;
+                // You can add a visual indicator for module progress if needed
+                console.log(`Progreso del módulo: ${progressPercentage.toFixed(2)}%`);
+            }
+
+            // Start Module Button
+            startModuleBtn.addEventListener('click', () => {
+                coverPage.classList.add('hidden');
+                moduleContent.classList.remove('hidden');
+                // Optional: Scroll to the top of the module content
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Initialize activity points and update display
+            const quizActivity = document.getElementById('quizActivity');
+            const exerciseActivity = document.getElementById('exerciseActivity');
+            const problemSolvingActivity = document.getElementById('problemSolvingActivity');
+            const matchingActivity = document.getElementById('matchingActivity');
+            const activityTrueFalse = document.getElementById('activityTrueFalse');
+
+            // Set initial scores as 0 for all activities
+            quizActivity.dataset.lastScore = "0";
+            exerciseActivity.dataset.lastScore = "0";
+            problemSolvingActivity.dataset.lastScore = "0";
+            matchingActivity.dataset.lastScore = "0";
+            activityTrueFalse.dataset.lastScore = "0";
+
+            function calculateTotalActivityPoints() {
+                totalActivityPoints = 0;
+                // Quiz points (1 point per correct answer)
+                totalActivityPoints += moduleData.activities.quiz.questions.length;
+                // Exercise points (1 point)
+                totalActivityPoints += 1;
+                // Problem Solving points (1 point)
+                totalActivityPoints += 1;
+                // Matching points (1 point per correct pair)
+                totalActivityPoints += moduleData.activities.matching.pairs.length;
+                // True/False points (1 point per correct answer)
+                totalActivityPoints += moduleData.activities.trueFalse.questions.length;
+            }
+
+            function updateScoreDisplay() {
+                earnedActivityPoints = parseInt(quizActivity.dataset.lastScore || 0) +
+                    parseInt(exerciseActivity.dataset.lastScore || 0) +
+                    parseInt(problemSolvingActivity.dataset.lastScore || 0) +
+                    parseInt(matchingActivity.dataset.lastScore || 0) +
+                    parseInt(activityTrueFalse.dataset.lastScore || 0);
+
+                const scoreText = `Puntuación: ${earnedActivityPoints} / ${totalActivityPoints}`;
+                let scoreDisplayElement = document.getElementById('scoreDisplay');
+                if (!scoreDisplayElement) {
+                    scoreDisplayElement = document.createElement('div');
+                    scoreDisplayElement.id = 'scoreDisplay';
+                    scoreDisplayElement.className = 'fixed bottom-4 left-4 bg-purple-600 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+                    document.body.appendChild(scoreDisplayElement);
+                }
+                scoreDisplayElement.textContent = scoreText;
+            }
+
+            calculateTotalActivityPoints();
+            updateScoreDisplay(); // Initial display
+
+
+            // Quiz Logic
+            const submitQuizBtn = document.getElementById('submitQuiz');
+            const resetQuizBtn = document.getElementById('resetQuizBtn');
+
+            submitQuizBtn.addEventListener('click', () => {
+                let correctAnswers = 0;
+                const quizQuestions = moduleData.activities.quiz.questions;
+                let allAnswered = true;
+
+                quizQuestions.forEach((q, index) => {
+                    const selectedOption = document.querySelector(`input[name="q${index+1}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-q${index+1}`);
+
+                    if (!selectedOption) {
+                        allAnswered = false;
+                        feedbackElement.textContent = 'Por favor, selecciona una opción.';
+                        feedbackElement.className = 'mt-2 text-sm text-red-500';
+                        return;
+                    }
+
+                    if (selectedOption.value === q.correctValue) {
+                        feedbackElement.textContent = q.feedbackCorrect;
+                        feedbackElement.className = 'mt-2 text-sm text-green-600';
+                        correctAnswers++;
+                    } else {
+                        feedbackElement.textContent = q.feedbackIncorrect;
+                        feedbackElement.className = 'mt-2 text-sm text-red-600';
+                    }
+                    // Disable radios after submission
+                    document.querySelectorAll(`input[name="q${index+1}"]`).forEach(radio => radio.disabled = true);
+                });
+
+                if (!allAnswered) {
+                    showModal('Faltan respuestas', 'Por favor, responde todas las preguntas del cuestionario antes de verificar.');
+                    return;
+                }
+
+                quizActivity.dataset.lastScore = correctAnswers; // Update score for this activity
+                updateScoreDisplay();
+                submitQuizBtn.disabled = true;
+                resetQuizBtn.disabled = false;
+                if (correctAnswers === quizQuestions.length) {
+                    quizActivity.classList.add('completed-activity');
+                    showModal('¡Cuestionario Completado!', `Has respondido correctamente a ${correctAnswers} de ${quizQuestions.length} preguntas.`);
+                } else {
+                    showModal('Resultados del Cuestionario', `Has respondido correctamente a ${correctAnswers} de ${quizQuestions.length} preguntas. ¡Sigue practicando!`);
+                }
+            });
+
+            resetQuizBtn.addEventListener('click', () => {
+                document.querySelectorAll('input[name^="q"]').forEach(radio => {
+                    radio.checked = false;
+                    radio.disabled = false;
+                });
+                document.querySelectorAll('[id^="feedback-q"]').forEach(feedback => feedback.textContent = '');
+                quizActivity.dataset.lastScore = "0";
+                updateScoreDisplay();
+                submitQuizBtn.disabled = false;
+                resetQuizBtn.disabled = true;
+                quizActivity.classList.remove('completed-activity');
+            });
+
+
+            // Exercise Logic
+            const exercisePromptInput = document.getElementById('exercisePrompt');
+            const submitExerciseBtn = document.getElementById('submitExercise');
+            const resetExerciseBtn = document.getElementById('resetExerciseBtn');
+            const awardExercisePointsBtn = document.getElementById('awardExercisePointsBtn');
+            const exerciseFeedback = document.getElementById('exerciseFeedback');
+
+            exercisePromptInput.addEventListener('input', () => {
+                submitExerciseBtn.disabled = false;
+                exerciseFeedback.textContent = '';
+                awardExercisePointsBtn.classList.add('hidden');
+                exerciseActivity.classList.remove('completed-activity');
+                exerciseActivity.dataset.lastScore = "0";
+                updateScoreDisplay();
+                resetExerciseBtn.disabled = false; // Enable reset once typing starts
+            });
+
+            submitExerciseBtn.addEventListener('click', () => {
+                const prompt = exercisePromptInput.value;
+                const {
+                    minLength,
+                    keywords
+                } = moduleData.activities.exercise;
+
+                let feedbackMessage = '';
+                let isValid = true;
+
+                if (prompt.length < minLength) {
+                    feedbackMessage = `Tu prompt es muy corto. Necesita al menos ${minLength} caracteres.`;
+                    isValid = false;
+                }
+
+                const missingKeywords = keywords.filter(keyword => !prompt.toLowerCase().includes(keyword.toLowerCase()));
+                if (missingKeywords.length > 0) {
+                    feedbackMessage += (feedbackMessage ? ' ' : '') + `Faltan las siguientes palabras clave: ${missingKeywords.join(', ')}.`;
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    exerciseFeedback.textContent = '¡Excelente prompt! Has incluido los elementos clave. Ahora puedes auto-evaluarte.';
+                    exerciseFeedback.className = 'mt-4 text-sm text-green-600';
+                    awardExercisePointsBtn.classList.remove('hidden');
+                    submitExerciseBtn.disabled = true; // Disable submit after successful validation
+                } else {
+                    exerciseFeedback.textContent = feedbackMessage;
+                    exerciseFeedback.className = 'mt-4 text-sm text-red-600';
+                    awardExercisePointsBtn.classList.add('hidden');
+                }
+            });
+
+            awardExercisePointsBtn.addEventListener('click', () => {
+                exerciseActivity.dataset.lastScore = "1";
+                updateScoreDisplay();
+                exerciseActivity.classList.add('completed-activity');
+                awardExercisePointsBtn.disabled = true;
+                submitExerciseBtn.disabled = true;
+                showModal('Actividad Completada', '¡Has demostrado una excelente comprensión de cómo formular prompts!');
+            });
+
+            resetExerciseBtn.addEventListener('click', () => {
+                exercisePromptInput.value = '';
+                exerciseFeedback.textContent = '';
+                submitExerciseBtn.disabled = false;
+                awardExercisePointsBtn.classList.add('hidden');
+                exerciseActivity.classList.remove('completed-activity');
+                exerciseActivity.dataset.lastScore = "0";
+                updateScoreDisplay();
+                resetExerciseBtn.disabled = true; // Disable reset until typing starts again
+            });
+
+            // Problem Solving Logic
+            const problemSolvingPromptInput = document.getElementById('problemSolvingPrompt');
+            const submitProblemSolvingBtn = document.getElementById('submitProblemSolving');
+            const resetProblemSolvingBtn = document.getElementById('resetProblemSolvingBtn');
+            const problemSolvingFeedback = document.getElementById('problemSolvingFeedback');
+
+            problemSolvingPromptInput.addEventListener('input', () => {
+                submitProblemSolvingBtn.disabled = false;
+                problemSolvingFeedback.textContent = '';
+                problemSolvingActivity.classList.remove('completed-activity');
+                problemSolvingActivity.dataset.lastScore = "0";
+                updateScoreDisplay();
+                resetProblemSolvingBtn.disabled = false;
+            });
+
+            submitProblemSolvingBtn.addEventListener('click', () => {
+                const prompt = problemSolvingPromptInput.value;
+                const {
+                    minLength,
+                    keywords
+                } = moduleData.activities.problemSolving;
+
+                let feedbackMessage = '';
+                let isValid = true;
+
+                if (prompt.length < minLength) {
+                    feedbackMessage = `Tu prompt es muy corto. Necesita al menos ${minLength} caracteres.`;
+                    isValid = false;
+                }
+
+                const missingKeywords = keywords.filter(keyword => !prompt.toLowerCase().includes(keyword.toLowerCase()));
+                if (missingKeywords.length > 0) {
+                    feedbackMessage += (feedbackMessage ? ' ' : '') + `Faltan las siguientes palabras clave: ${missingKeywords.join(', ')}.`;
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    problemSolvingFeedback.textContent = '¡Excelente estrategia! Has formulado un prompt efectivo para la resolución de problemas. Ganas 1 punto.';
+                    problemSolvingFeedback.className = 'mt-4 text-sm text-green-600';
+                    problemSolvingActivity.dataset.lastScore = "1"; // Award point
+                    updateScoreDisplay();
+                    problemSolvingActivity.classList.add('completed-activity');
+                    submitProblemSolvingBtn.disabled = true; // Disable after correct submission
+                    showModal('Actividad Completada', '¡Has demostrado una gran habilidad para formular estrategias pedagógicas!');
+                } else {
+                    problemSolvingFeedback.textContent = feedbackMessage;
+                    problemSolvingFeedback.className = 'mt-4 text-sm text-red-600';
+                }
+            });
+
+            resetProblemSolvingBtn.addEventListener('click', () => {
+                problemSolvingPromptInput.value = '';
+                problemSolvingFeedback.textContent = '';
+                submitProblemSolvingBtn.disabled = false;
+                problemSolvingActivity.classList.remove('completed-activity');
+                problemSolvingActivity.dataset.lastScore = "0";
+                updateScoreDisplay();
+                resetProblemSolvingBtn.disabled = true;
+            });
+
+            // Matching Logic
+            const submitMatchingBtn = document.getElementById('submitMatching');
+            const resetMatchingBtn = document.getElementById('resetMatchingBtn');
+
+            submitMatchingBtn.addEventListener('click', () => {
+                let correctPairs = 0;
+                const matchingPairs = moduleData.activities.matching.pairs;
+                let allAnswered = true;
+
+                matchingPairs.forEach((pair, index) => {
+                    const selectedOption = document.querySelector(`input[name="match${index+1}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-match${index+1}`);
+
+                    if (!selectedOption) {
+                        allAnswered = false;
+                        feedbackElement.textContent = 'Selecciona una opción.';
+                        feedbackElement.className = 'text-red-500';
+                        return;
+                    }
+
+                    if (selectedOption.value === pair.correctValue) {
+                        feedbackElement.textContent = pair.feedbackCorrect;
+                        feedbackElement.className = 'text-green-600';
+                        correctPairs++;
+                    } else {
+                        feedbackElement.textContent = pair.feedbackIncorrect;
+                        feedbackElement.className = 'text-red-600';
+                    }
+                    // Disable radios after submission
+                    document.querySelectorAll(`input[name="match${index+1}"]`).forEach(radio => radio.disabled = true);
+                });
+
+                if (!allAnswered) {
+                    showModal('Faltan emparejamientos', 'Por favor, completa todos los emparejamientos antes de verificar.');
+                    return;
+                }
+
+                matchingActivity.dataset.lastScore = correctPairs;
+                updateScoreDisplay();
+                submitMatchingBtn.disabled = true;
+                resetMatchingBtn.disabled = false;
+
+                if (correctPairs === matchingPairs.length) {
+                    matchingActivity.classList.add('completed-activity');
+                    showModal('¡Emparejamiento Completado!', `Has emparejado correctamente ${correctPairs} de ${matchingPairs.length} conceptos.`);
+                } else {
+                    showModal('Resultados del Emparejamiento', `Has emparejado correctamente ${correctPairs} de ${matchingPairs.length} conceptos. ¡Inténtalo de nuevo!`);
+                }
+            });
+
+            resetMatchingBtn.addEventListener('click', () => {
+                document.querySelectorAll('input[name^="match"]').forEach(radio => {
+                    radio.checked = false;
+                    radio.disabled = false;
+                });
+                document.querySelectorAll('[id^="feedback-match"]').forEach(feedback => feedback.textContent = '');
+                matchingActivity.dataset.lastScore = "0";
+                updateScoreDisplay();
+                submitMatchingBtn.disabled = false;
+                resetMatchingBtn.disabled = true;
+                matchingActivity.classList.remove('completed-activity');
+            });
+
+            // True/False Logic
+            const submitTrueFalseBtn = document.getElementById('submitTrueFalse');
+            const resetTrueFalseBtn = document.getElementById('resetTrueFalseBtn');
+
+            submitTrueFalseBtn.addEventListener('click', () => {
+                let correctAnswers = 0;
+                const tfQuestions = moduleData.activities.trueFalse.questions;
+                let allAnswered = true;
+
+                tfQuestions.forEach((q, index) => {
+                    const selectedOption = document.querySelector(`input[name="tf${index+1}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-tf${index+1}`);
+
+                    if (!selectedOption) {
+                        allAnswered = false;
+                        feedbackElement.textContent = 'Por favor, selecciona una opción.';
+                        feedbackElement.className = 'mt-2 text-sm text-red-500';
+                        return;
+                    }
+
+                    if (selectedOption.value === q.correctValue.toString()) { // Ensure correctValue is string
+                        feedbackElement.textContent = q.feedbackCorrect;
+                        feedbackElement.className = 'mt-2 text-sm text-green-600';
+                        correctAnswers++;
+                    } else {
+                        feedbackElement.textContent = q.feedbackIncorrect;
+                        feedbackElement.className = 'mt-2 text-sm text-red-600';
+                    }
+                    // Disable radios after submission
+                    document.querySelectorAll(`input[name="tf${index+1}"]`).forEach(radio => radio.disabled = true);
+                });
+
+                if (!allAnswered) {
+                    showModal('Faltan respuestas', 'Por favor, responde todas las preguntas de Verdadero/Falso antes de verificar.');
+                    return;
+                }
+
+                activityTrueFalse.dataset.lastScore = correctAnswers;
+                updateScoreDisplay();
+                submitTrueFalseBtn.disabled = true;
+                resetTrueFalseBtn.disabled = false;
+                if (correctAnswers === tfQuestions.length) {
+                    activityTrueFalse.classList.add('completed-activity');
+                    showModal('¡Verdadero/Falso Completado!', `Has respondido correctamente a ${correctAnswers} de ${tfQuestions.length} afirmaciones.`);
+                } else {
+                    showModal('Resultados Verdadero/Falso', `Has respondido correctamente a ${correctAnswers} de ${tfQuestions.length} afirmaciones. ¡Puedes intentarlo de nuevo!`);
+                }
+            });
+
+            resetTrueFalseBtn.addEventListener('click', () => {
+                document.querySelectorAll('input[name^="tf"]').forEach(radio => {
+                    radio.checked = false;
+                    radio.disabled = false;
+                });
+                document.querySelectorAll('[id^="feedback-tf"]').forEach(feedback => feedback.textContent = '');
+                activityTrueFalse.dataset.lastScore = "0";
+                updateScoreDisplay();
+                submitTrueFalseBtn.disabled = false;
+                resetTrueFalseBtn.disabled = true;
+                activityTrueFalse.classList.remove('completed-activity');
+            });
+
+            // Initial state for activity reset buttons
+            resetQuizBtn.disabled = true;
+            resetExerciseBtn.disabled = true;
+            awardExercisePointsBtn.disabled = true;
+            resetProblemSolvingBtn.disabled = true;
+            resetMatchingBtn.disabled = true;
+            resetTrueFalseBtn.disabled = true;
+
+            // Ensure all activities have a data-last-score attribute from the start
+            quizActivity.dataset.lastScore = "0";
+            exerciseActivity.dataset.lastScore = "0";
+            problemSolvingActivity.dataset.lastScore = "0";
+            matchingActivity.dataset.lastScore = "0";
+            activityTrueFalse.dataset.lastScore = "0";
+
+            updateScoreDisplay(); // Update the score display to reflect initial 0s
+        });
+    </script>
+</body>
+</html>
+</immersive>
